@@ -1,0 +1,92 @@
+{
+  "skill_name": "api-blame-solver",
+  "evals": [
+    {
+      "id": 1,
+      "name": "param-name-mismatch",
+      "prompt": "联调报错了，帮我看看是谁的问题：\n\n前端 Request Payload:\n{\n  \"userid\": 123,\n  \"orderType\": \"NORMAL\"\n}\n\nResponse:\nStatus: 400 Bad Request\nBody: {\"code\":400,\"message\":\"Required request parameter 'userId' for method parameter type Long is not present\"}\n\n后端 Stacktrace:\norg.springframework.web.bind.MissingServletRequestParameterException: Required request parameter 'userId' for method parameter type Long is not present\n\tat org.springframework.web.method.annotation.RequestParamMethodArgumentResolver.handleMissingValue(RequestParamMethodArgumentResolver.java:206)\n\tat org.springframework.web.method.annotation.AbstractNamedValueMethodArgumentResolver.resolveArgument(AbstractNamedValueMethodArgumentResolver.java:136)\n\tat org.springframework.web.method.support.HandlerMethodArgumentResolverComposite.resolveArgument(HandlerMethodArgumentResolverComposite.java:122)",
+      "expected_output": "责任判定为前端，原因是参数名 userId 拼写成了 userid",
+      "files": [],
+      "assertions": [
+        {
+          "id": "has-blame",
+          "text": "输出包含责任判定部分，明确指出是前端问题",
+          "type": "format"
+        },
+        {
+          "id": "root-cause",
+          "text": "用大白话解释了根本原因：前端参数名拼写错误（userId 写成了 userid）",
+          "type": "coverage"
+        },
+        {
+          "id": "fix-suggestion",
+          "text": "给出了具体的前端修复方案，指出需要将 userid 改为 userId",
+          "type": "coverage"
+        },
+        {
+          "id": "evidence-cited",
+          "text": "引用了具体证据（前端发的参数名 vs 后端期望的参数名）",
+          "type": "quality"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "name": "backend-npe",
+      "prompt": "接口调不通了，前端报了500错误：\n\n前端发了 POST /api/user/profile\nRequest Payload:\n{\n  \"userId\": 456,\n  \"nickname\": null\n}\n\nResponse:\nStatus: 500 Internal Server Error\nBody: {\"code\":500,\"message\":\"Internal Server Error\"}\n\n后端 Stacktrace:\njava.lang.NullPointerException: Cannot invoke \"String.length()\" because \"nickname\" is null\n\tat com.example.service.UserService.updateProfile(UserService.java:87)\n\tat com.example.controller.UserController.profile(UserController.java:42)\n\tat org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.handleInternal(RequestMappingHandlerAdapter.java:893)",
+      "expected_output": "责任判定为后端，原因是没有对 nickname 参数做 null 判断导致 NPE",
+      "files": [],
+      "assertions": [
+        {
+          "id": "has-blame",
+          "text": "输出包含责任判定部分，明确指出是后端问题",
+          "type": "format"
+        },
+        {
+          "id": "root-cause",
+          "text": "用大白话解释了根本原因：后端没有处理 nickname 为 null 的情况导致空指针异常",
+          "type": "coverage"
+        },
+        {
+          "id": "fix-suggestion",
+          "text": "给出了具体的后端修复方案，指出需要在 UserService.java:87 附近加 null 判断",
+          "type": "coverage"
+        },
+        {
+          "id": "evidence-cited",
+          "text": "引用了具体证据（异常类型、出错类名和行号）",
+          "type": "quality"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "name": "content-type-mismatch",
+      "prompt": "联调卡住了，前端请求一直报 415：\n\n前端 fetch 代码：\nfetch('/api/orders', {\n  method: 'POST',\n  headers: {\n    'Content-Type': 'text/plain'\n  },\n  body: JSON.stringify({ orderId: 'ORD-001' })\n})\n\nResponse:\nStatus: 415 Unsupported Media Type\n\n后端 Stacktrace:\norg.springframework.web.HttpMediaTypeNotSupportedException: Content type 'text/plain' not supported\n\tat org.springframework.web.servlet.mvc.method.annotation.AbstractMessageConverterMethodArgumentResolver.readWithMessageConverters(AbstractMessageConverterMethodArgumentResolver.java:212)",
+      "expected_output": "责任判定为前端，原因是 Content-Type 设置错误，应该用 application/json",
+      "files": [],
+      "assertions": [
+        {
+          "id": "has-blame",
+          "text": "输出包含责任判定部分，明确指出是前端问题",
+          "type": "format"
+        },
+        {
+          "id": "root-cause",
+          "text": "用大白话解释了根本原因：前端 Content-Type 设置错误，后端只接受 application/json",
+          "type": "coverage"
+        },
+        {
+          "id": "fix-suggestion",
+          "text": "给出了具体的前端修复方案，将 Content-Type 改为 application/json",
+          "type": "coverage"
+        },
+        {
+          "id": "status-code-explained",
+          "text": "解释了 415 状态码的含义（Unsupported Media Type）",
+          "type": "coverage"
+        }
+      ]
+    }
+  ]
+}

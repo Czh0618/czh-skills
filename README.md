@@ -7,6 +7,7 @@
 | Skill | 说明 | 触发方式 |
 |-------|------|---------|
 | [req-reverse-eng](skills/req-reverse-eng/) | AI 需求反向工程 — 将模糊的产品需求转化为结构化的选择题清单、决策矩阵和策略模式代码骨架 | `/req-reverse-eng` |
+| [api-blame-solver](skills/api-blame-solver/) | 前后端联调排错专家 | `/api-blame-solver` |
 
 ## 安装
 

@@ -20,4 +20,4 @@ venv/
 /tmp/
 
 # Test
-req-reverse-eng-workspace/
+test/
