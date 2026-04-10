@@ -1,0 +1,117 @@
+{
+  "skill_name": "req-reverse-eng",
+  "evals": [
+    {
+      "id": 1,
+      "name": "coupon-system",
+      "prompt": "我们要做一个优惠券系统，支持满减券、折扣券、新人券。用户下单时可以选择使用优惠券，系统需要校验优惠券的使用条件。",
+      "expected_output": "以选择题/判断题形式输出的防御性需求清单，覆盖状态流转、边界条件、角色权限等维度",
+      "files": [],
+      "assertions": [
+        {
+          "id": "format-quiz",
+          "text": "输出包含选择题（A/B/C选项）或判断题（是/否）格式的问题",
+          "type": "format"
+        },
+        {
+          "id": "dimension-state",
+          "text": "覆盖了优惠券的状态流转分析（如创建、激活、使用、过期、作废等）",
+          "type": "coverage"
+        },
+        {
+          "id": "dimension-edge",
+          "text": "列举了至少3个边界条件（如并发使用、叠加规则、金额精度等）",
+          "type": "coverage"
+        },
+        {
+          "id": "dimension-permission",
+          "text": "涉及角色与权限分析（如谁能创建券、谁能核销等）",
+          "type": "coverage"
+        },
+        {
+          "id": "no-code",
+          "text": "不包含任何代码片段，纯业务问题清单",
+          "type": "constraint"
+        },
+        {
+          "id": "question-count",
+          "text": "问题数量在8-20个之间，既全面又不过度",
+          "type": "quality"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "name": "approval-flow",
+      "prompt": "做一个请假审批流程，员工提交请假申请，直属领导审批，超过3天的需要部门经理二次审批。",
+      "expected_output": "以选择题/判断题形式输出的防御性需求清单，重点覆盖审批状态机和异常处理",
+      "files": [],
+      "assertions": [
+        {
+          "id": "format-quiz",
+          "text": "输出包含选择题（A/B/C选项）或判断题（是/否）格式的问题",
+          "type": "format"
+        },
+        {
+          "id": "dimension-state",
+          "text": "覆盖了审批流的完整状态流转（提交、审批中、已批准、已驳回、已撤回等）",
+          "type": "coverage"
+        },
+        {
+          "id": "dimension-edge",
+          "text": "列举了边界条件（如审批人不在岗、跨天请假、并发审批等）",
+          "type": "coverage"
+        },
+        {
+          "id": "no-code",
+          "text": "不包含任何代码片段，纯业务问题清单",
+          "type": "constraint"
+        },
+        {
+          "id": "question-count",
+          "text": "问题数量在8-20个之间",
+          "type": "quality"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "name": "payment-refund",
+      "prompt": "用户在支付完成后可以申请退款，需要支持全额退款和部分退款，退款需要经过客服审核。",
+      "expected_output": "以选择题/判断题形式输出的防御性需求清单，重点覆盖退款状态和资金安全",
+      "files": [],
+      "assertions": [
+        {
+          "id": "format-quiz",
+          "text": "输出包含选择题（A/B/C选项）或判断题（是/否）格式的问题",
+          "type": "format"
+        },
+        {
+          "id": "dimension-state",
+          "text": "覆盖了退款状态流转（申请、审核中、退款中、已退款、退款失败等）",
+          "type": "coverage"
+        },
+        {
+          "id": "dimension-edge",
+          "text": "列举了边界条件（如重复退款、部分退款后再退、退款超时等）",
+          "type": "coverage"
+        },
+        {
+          "id": "dimension-data",
+          "text": "涉及数据一致性问题（如退款与订单状态同步、库存回滚等）",
+          "type": "coverage"
+        },
+        {
+          "id": "no-code",
+          "text": "不包含任何代码片段，纯业务问题清单",
+          "type": "constraint"
+        },
+        {
+          "id": "question-count",
+          "text": "问题数量在8-20个之间",
+          "type": "quality"
+        }
+      ]
+    }
+  ]
+}
