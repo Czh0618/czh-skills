@@ -1,0 +1,210 @@
+{
+  "skill_name": "java-refactor",
+  "evals": [
+    {
+      "id": 1,
+      "name": "long-method-place-order",
+      "prompt": "帮我重构下面这个方法。它太长了，现在加新功能我都不敢动。\n\n```java\npublic class OrderService {\n    public OrderResult placeOrder(String customerId, List<ItemRequest> items, AddressRequest addr, boolean vip, String couponCode) {\n        // 参数校验\n        if (customerId == null || customerId.isEmpty()) throw new IllegalArgumentException(\"customerId\");\n        if (items == null || items.isEmpty()) throw new IllegalArgumentException(\"items\");\n        if (addr == null) throw new IllegalArgumentException(\"address\");\n        if (addr.getProvince() == null || addr.getCity() == null || addr.getDistrict() == null || addr.getDetail() == null) {\n            throw new IllegalArgumentException(\"address fields\");\n        }\n\n        // 查客户\n        Customer customer = customerMapper.selectById(customerId);\n        if (customer == null) throw new CustomerNotFoundException(customerId);\n        if (customer.getStatus() != 1) throw new IllegalStateException(\"customer disabled\");\n\n        // 校验库存\n        Map<String, Integer> stockMap = new HashMap<>();\n        for (ItemRequest item : items) {\n            Product p = productMapper.selectById(item.getProductId());\n            if (p == null) throw new ProductNotFoundException(item.getProductId());\n            Integer stock = inventoryMapper.selectStock(item.getProductId());\n            if (stock < item.getQuantity()) throw new InsufficientStockException(item.getProductId());\n            stockMap.put(item.getProductId(), item.getQuantity());\n        }\n\n        // 计算商品金额\n        BigDecimal itemsTotal = BigDecimal.ZERO;\n        for (ItemRequest item : items) {\n            Product p = productMapper.selectById(item.getProductId());\n            BigDecimal subtotal = p.getPrice().multiply(BigDecimal.valueOf(item.getQuantity()));\n            itemsTotal = itemsTotal.add(subtotal);\n        }\n\n        // 计算运费\n        double weight = 0;\n        for (ItemRequest item : items) {\n            Product p = productMapper.selectById(item.getProductId());\n            weight += p.getWeight() * item.getQuantity();\n        }\n        BigDecimal shipping;\n        if (weight > 5) shipping = BigDecimal.valueOf(weight * 2.5);\n        else shipping = BigDecimal.valueOf(10);\n        if (vip) shipping = shipping.multiply(BigDecimal.valueOf(0.8));\n        if (\"BEIJING\".equals(addr.getProvince()) || \"SHANGHAI\".equals(addr.getProvince())) {\n            shipping = shipping.multiply(BigDecimal.valueOf(1.2));\n        }\n\n        // 应用优惠券\n        BigDecimal discount = BigDecimal.ZERO;\n        if (couponCode != null && !couponCode.isEmpty()) {\n            Coupon coupon = couponMapper.selectByCode(couponCode);\n            if (coupon == null) throw new CouponNotFoundException(couponCode);\n            if (coupon.getStatus() != 1) throw new IllegalStateException(\"coupon used or expired\");\n            if (coupon.getMinAmount() != null && itemsTotal.compareTo(coupon.getMinAmount()) < 0) {\n                throw new IllegalStateException(\"min amount not reached\");\n            }\n            if (coupon.getType() == 1) discount = coupon.getValue();\n            else if (coupon.getType() == 2) discount = itemsTotal.multiply(coupon.getValue()).divide(BigDecimal.valueOf(100));\n            couponMapper.markUsed(coupon.getId());\n        }\n\n        // 计算最终金额\n        BigDecimal finalAmount = itemsTotal.add(shipping).subtract(discount);\n        if (finalAmount.compareTo(BigDecimal.ZERO) < 0) finalAmount = BigDecimal.ZERO;\n\n        // 落库\n        Order order = new Order();\n        order.setId(UUID.randomUUID().toString());\n        order.setCustomerId(customerId);\n        order.setItemsAmount(itemsTotal);\n        order.setShippingAmount(shipping);\n        order.setDiscountAmount(discount);\n        order.setFinalAmount(finalAmount);\n        order.setStatus(0);\n        order.setProvince(addr.getProvince());\n        order.setCity(addr.getCity());\n        order.setDistrict(addr.getDistrict());\n        order.setDetailAddress(addr.getDetail());\n        order.setCreatedAt(new Date());\n        orderMapper.insert(order);\n\n        for (ItemRequest item : items) {\n            OrderItem oi = new OrderItem();\n            oi.setOrderId(order.getId());\n            oi.setProductId(item.getProductId());\n            oi.setQuantity(item.getQuantity());\n            orderItemMapper.insert(oi);\n            inventoryMapper.decreaseStock(item.getProductId(), item.getQuantity());\n        }\n\n        // 发邮件\n        try {\n            new SmtpEmailSender().send(customer.getEmail(), \"Order placed: \" + order.getId());\n        } catch (Exception e) {\n            log.error(\"send email failed\", e);\n        }\n\n        return new OrderResult(order.getId(), finalAmount);\n    }\n}\n```\n\n这块代码 Java 17 / Spring Boot 3 项目，目前有 OrderServiceTest 覆盖率约 30%，没有针对优惠券和 VIP 折扣的用例。",
+      "expected_output": "诊断报告 + 重构路线图 + 至少 1-2 个步骤的详细执行。诊断应识别长方法、数据泥团、霰弹式修改、硬编码 new 等多个坏味道；路线图应先排补特征化测试，再排小步重构；步骤应给出 before/after 与机械化步骤。",
+      "files": [],
+      "assertions": [
+        {
+          "id": "step-zero-boundary",
+          "text": "Step 0 阶段询问范围、测试覆盖、API 变更许可、技术栈（或确认用户已提供）",
+          "type": "process"
+        },
+        {
+          "id": "diagnosis-table-format",
+          "text": "诊断报告以 Markdown 表格输出，包含坏味道、严重度、推荐手法、工作量、依赖前置等列",
+          "type": "format"
+        },
+        {
+          "id": "smell-long-method",
+          "text": "识别出长方法（placeOrder 方法过长）作为高严重度问题",
+          "type": "coverage"
+        },
+        {
+          "id": "smell-data-clump",
+          "text": "识别出 province/city/district/detail 数据泥团或建议引入 Address 值对象",
+          "type": "coverage"
+        },
+        {
+          "id": "smell-hard-coded-new",
+          "text": "识别出 new SmtpEmailSender() 这类硬编码依赖（不可测试 / 紧耦合）",
+          "type": "coverage"
+        },
+        {
+          "id": "test-first",
+          "text": "由于测试覆盖低（30%），路线图首位排入'补特征化测试'步骤而不是直接重构",
+          "type": "process"
+        },
+        {
+          "id": "step-atomic",
+          "text": "Step 3 输出的每个步骤是原子化的，包含 before/after、机械化步骤、测试命令与回滚策略",
+          "type": "format"
+        },
+        {
+          "id": "no-auto-edit",
+          "text": "skill 不直接调用 Edit / Write 修改文件，只输出诊断与步骤建议",
+          "type": "constraint"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "name": "god-class-user-service",
+      "prompt": "下面这个 UserService 已经 700+ 行了，每次加新功能都很痛苦。帮我看看怎么拆。\n\n```java\n@Service\npublic class UserService {\n    @Autowired private UserMapper userMapper;\n    @Autowired private RoleMapper roleMapper;\n    @Autowired private PermissionMapper permissionMapper;\n    @Autowired private AuditLogMapper auditLogMapper;\n    @Autowired private NotificationSender notificationSender;\n    @Autowired private SmsClient smsClient;\n    @Autowired private EmailClient emailClient;\n    @Autowired private RedisTemplate<String, Object> redis;\n    @Autowired private ApplicationEventPublisher publisher;\n    @Autowired private PasswordEncoder passwordEncoder;\n    @Autowired private TenantContextHolder tenantHolder;\n\n    // === 用户基础操作 ===\n    public User createUser(...) { /* 50 行 */ }\n    public User updateUser(...) { /* 40 行 */ }\n    public void deleteUser(...) { /* 30 行 */ }\n    public User findUser(...) { /* 20 行 */ }\n    public List<User> listUsers(...) { /* 30 行 */ }\n\n    // === 角色与权限 ===\n    public void assignRole(...) { /* 35 行 */ }\n    public void revokeRole(...) { /* 25 行 */ }\n    public List<Permission> getUserPermissions(...) { /* 45 行 */ }\n    public boolean hasPermission(...) { /* 30 行 */ }\n    public void grantPermission(...) { /* 40 行 */ }\n\n    // === 审计 ===\n    public void logUserAction(...) { /* 25 行 */ }\n    public List<AuditLog> queryAuditLogs(...) { /* 35 行 */ }\n    public AuditReport generateAuditReport(...) { /* 60 行 */ }\n\n    // === 通知 ===\n    public void sendWelcomeNotification(User user) { /* 40 行 */ }\n    public void sendPasswordResetNotification(User user) { /* 50 行 */ }\n    public void sendSecurityAlert(User user, String alert) { /* 45 行 */ }\n}\n```\n\nJava 17 / Spring Boot 3 / MyBatis。每个 Service 方法都有 @Transactional。测试覆盖率 65%。",
+      "expected_output": "诊断为上帝类 / 发散式变化；路线图建议按子领域拆分（User / Permission / Audit / Notification 4 个 Service）；提醒事务边界与 Spring Bean 注入变化；步骤按拆分顺序（先无依赖叶子模块开始）展开",
+      "files": [],
+      "assertions": [
+        {
+          "id": "smell-god-class",
+          "text": "识别上帝类作为高严重度问题",
+          "type": "coverage"
+        },
+        {
+          "id": "smell-divergent-change",
+          "text": "识别发散式变化（按业务子域分组明显）",
+          "type": "coverage"
+        },
+        {
+          "id": "split-by-subdomain",
+          "text": "建议按子领域拆分为多个 Service（用户/权限/审计/通知）",
+          "type": "process"
+        },
+        {
+          "id": "spring-warnings",
+          "text": "提示 @Transactional 边界变化、Spring 注入点变化、AOP 切面影响等 Spring 特定风险",
+          "type": "constraint"
+        },
+        {
+          "id": "split-order",
+          "text": "路线图给出明确的拆分顺序（如先拆无依赖的叶子模块，再拆有依赖的）",
+          "type": "process"
+        },
+        {
+          "id": "circular-dep-check",
+          "text": "提醒拆分后可能出现的循环依赖，并给出预防/打破方案",
+          "type": "constraint"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "name": "anemic-domain-model",
+      "prompt": "帮我把这个 Order 改成充血模型，我看了一些 DDD 资料想试试。\n\n```java\n// 完全贫血\npublic class Order {\n    private String id;\n    private String customerId;\n    private BigDecimal amount;\n    private String currency;\n    private Integer status; // 0=DRAFT, 1=PAID, 2=SHIPPED, 3=CANCELLED\n    private List<OrderItem> items;\n    // getter/setter ...\n}\n\npublic class OrderItem {\n    private String productId;\n    private Integer quantity;\n    private BigDecimal unitPrice;\n    // getter/setter ...\n}\n\n// 厚厚的 Service\n@Service\npublic class OrderService {\n    @Autowired private OrderMapper orderMapper;\n\n    public void pay(String orderId, BigDecimal payAmount) {\n        Order order = orderMapper.selectById(orderId);\n        if (order.getStatus() != 0) throw new IllegalStateException(\"only DRAFT can pay\");\n        if (payAmount.compareTo(order.getAmount()) < 0) throw new IllegalStateException(\"insufficient\");\n        order.setStatus(1);\n        orderMapper.update(order);\n    }\n\n    public void cancel(String orderId) {\n        Order order = orderMapper.selectById(orderId);\n        if (order.getStatus() == 2) throw new IllegalStateException(\"already shipped\");\n        if (order.getStatus() == 3) throw new IllegalStateException(\"already cancelled\");\n        order.setStatus(3);\n        orderMapper.update(order);\n    }\n\n    public BigDecimal calculateTotal(String orderId) {\n        Order order = orderMapper.selectById(orderId);\n        BigDecimal total = BigDecimal.ZERO;\n        for (OrderItem item : order.getItems()) {\n            total = total.add(item.getUnitPrice().multiply(BigDecimal.valueOf(item.getQuantity())));\n        }\n        return total;\n    }\n}\n```",
+      "expected_output": "诊断为贫血模型 + 数据泥团（amount+currency）+ 类型码（status int）；建议按 DDD 战术：抽 Money 值对象、把 pay/cancel 行为搬入 Order、status 改 enum；提醒需先确认领域复杂度是否值得 DDD 化；可能引导 /req-reverse-eng 先确认领域规则",
+      "files": [],
+      "assertions": [
+        {
+          "id": "smell-anemic",
+          "text": "识别贫血模型",
+          "type": "coverage"
+        },
+        {
+          "id": "smell-type-code",
+          "text": "识别 status int 类型码反模式，建议改 enum",
+          "type": "coverage"
+        },
+        {
+          "id": "smell-money-vo",
+          "text": "识别 amount + currency 数据泥团，建议引入 Money 值对象",
+          "type": "coverage"
+        },
+        {
+          "id": "move-method-to-entity",
+          "text": "建议 Move Method（pay / cancel / calculateTotal 从 Service 搬入 Order 实体）",
+          "type": "process"
+        },
+        {
+          "id": "ddd-tactical-reference",
+          "text": "明确引用 DDD 战术模式（如聚合根、值对象、Move Method）",
+          "type": "process"
+        },
+        {
+          "id": "complexity-warning",
+          "text": "提醒 DDD 化需要评估领域复杂度，避免过度设计",
+          "type": "constraint"
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "name": "legacy-no-tests",
+      "prompt": "这个类是 5 年前老员工写的，现在没人维护。我要在里面加一个新功能（按地区做不同折扣率），但是这块代码没有单元测试，我也不敢动。\n\n```java\npublic class DiscountCalculator {\n    public BigDecimal calculate(String customerId, BigDecimal amount, String productCategory) {\n        // 直接 new 数据库连接\n        DbConnection conn = new DbConnection(\"jdbc:mysql://prod-db/order\", \"root\", \"pwd\");\n        // 静态调用读取配置\n        DiscountConfig config = ConfigLoader.load(\"discount.properties\");\n\n        Customer customer = conn.queryCustomer(customerId);\n        BigDecimal discount = BigDecimal.ZERO;\n\n        if (customer.getLevel() == 5) {\n            discount = amount.multiply(BigDecimal.valueOf(config.getVipRate()));\n        } else if (customer.getLevel() == 3 || customer.getLevel() == 4) {\n            discount = amount.multiply(BigDecimal.valueOf(config.getGoldRate()));\n        } else {\n            discount = amount.multiply(BigDecimal.valueOf(0.05));\n        }\n\n        // 按品类再调整\n        if (\"ELECTRONICS\".equals(productCategory)) {\n            discount = discount.multiply(BigDecimal.valueOf(0.8));\n        } else if (\"FOOD\".equals(productCategory)) {\n            discount = discount.multiply(BigDecimal.valueOf(1.2));\n        }\n\n        // 限制最大折扣\n        BigDecimal maxDiscount = amount.multiply(BigDecimal.valueOf(0.5));\n        if (discount.compareTo(maxDiscount) > 0) discount = maxDiscount;\n\n        // 静态调用记日志\n        Logger.log(\"discount calculated: \" + discount);\n\n        return discount;\n    }\n}\n```\n\n我能不能直接在 calculate 里加几行 if 处理地区？还是说有更安全的做法？",
+      "expected_output": "明确提示无测试场景的高风险；不建议直接动 calculate；引用 Feathers 技术：先做特征化测试 + 用 Sprout Method 加新功能 / 或用 Extract Interface 打破依赖；给出 3 步走的安全路径",
+      "files": [],
+      "assertions": [
+        {
+          "id": "warn-no-tests",
+          "text": "明确警示无测试场景的重构风险，不建议直接动旧代码",
+          "type": "constraint"
+        },
+        {
+          "id": "characterization-test",
+          "text": "建议先做特征化测试（characterization test）固化当前行为",
+          "type": "process"
+        },
+        {
+          "id": "dependency-breaking",
+          "text": "识别硬编码依赖（new DbConnection、ConfigLoader.load、Logger.log）并建议 Extract Interface / 子类化重写等手法",
+          "type": "process"
+        },
+        {
+          "id": "sprout-method",
+          "text": "建议用 Sprout Method 加新功能（按地区折扣作为独立可测方法）而不是直接修改原方法",
+          "type": "process"
+        },
+        {
+          "id": "no-direct-rewrite",
+          "text": "不建议'先重构再说'或'重写更快'",
+          "type": "constraint"
+        },
+        {
+          "id": "step-sequence",
+          "text": "给出明确的步骤顺序：先加测试 / 打破依赖 → 再加新功能 / 再重构旧代码",
+          "type": "process"
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "name": "controller-not-thin",
+      "prompt": "review 一下这个 Controller，我感觉太厚了。\n\n```java\n@RestController\n@RequestMapping(\"/api/orders\")\npublic class OrderController {\n    @Autowired private OrderMapper orderMapper;\n    @Autowired private CustomerMapper customerMapper;\n    @Autowired private ProductMapper productMapper;\n\n    @PostMapping\n    public ResponseEntity<?> create(@RequestBody OrderRequest req) {\n        // 校验\n        if (req == null) return ResponseEntity.badRequest().body(Map.of(\"error\", \"body required\"));\n        if (req.getCustomerId() == null || req.getCustomerId().isEmpty()) {\n            return ResponseEntity.badRequest().body(Map.of(\"error\", \"customerId required\"));\n        }\n        if (req.getItems() == null || req.getItems().isEmpty()) {\n            return ResponseEntity.badRequest().body(Map.of(\"error\", \"items required\"));\n        }\n        for (OrderItemRequest item : req.getItems()) {\n            if (item.getQuantity() <= 0) {\n                return ResponseEntity.badRequest().body(Map.of(\"error\", \"qty must > 0\"));\n            }\n        }\n\n        // 查客户\n        Customer customer = customerMapper.selectById(req.getCustomerId());\n        if (customer == null) {\n            return ResponseEntity.status(404).body(Map.of(\"error\", \"customer not found\"));\n        }\n\n        // 计算总价\n        BigDecimal total = BigDecimal.ZERO;\n        for (OrderItemRequest item : req.getItems()) {\n            Product p = productMapper.selectById(item.getProductId());\n            if (p == null) {\n                return ResponseEntity.status(404).body(Map.of(\"error\", \"product not found: \" + item.getProductId()));\n            }\n            total = total.add(p.getPrice().multiply(BigDecimal.valueOf(item.getQuantity())));\n        }\n\n        // 落库\n        Order order = new Order();\n        order.setId(UUID.randomUUID().toString());\n        order.setCustomerId(req.getCustomerId());\n        order.setAmount(total);\n        order.setStatus(0);\n        order.setCreatedAt(new Date());\n        orderMapper.insert(order);\n\n        // 构造响应\n        OrderResponseVO vo = new OrderResponseVO();\n        vo.setOrderId(order.getId());\n        vo.setCustomerName(customer.getName());\n        vo.setAmount(order.getAmount());\n        vo.setStatus(\"DRAFT\");\n        return ResponseEntity.ok(vo);\n    }\n}\n```",
+      "expected_output": "诊断为 Controller 太厚 / 业务规则泄露到 Web 层 / 跨层调用（Controller 直连 Mapper）；建议引入 Service 层、提取 Mapper 类、用 @Valid + @ControllerAdvice 集中处理校验与异常；保持 HTTP 契约不变",
+      "files": [],
+      "assertions": [
+        {
+          "id": "smell-fat-controller",
+          "text": "识别 Controller 承担了业务逻辑（业务规则、计算总价、落库编排）",
+          "type": "coverage"
+        },
+        {
+          "id": "layer-violation",
+          "text": "识别分层泄露：Controller 直接注入 Mapper，绕过 Service 层",
+          "type": "coverage"
+        },
+        {
+          "id": "extract-service",
+          "text": "建议把业务逻辑提取到 OrderService",
+          "type": "process"
+        },
+        {
+          "id": "controller-advice",
+          "text": "建议用 @Valid + Bean Validation + @ControllerAdvice 替代手写参数校验与异常处理",
+          "type": "process"
+        },
+        {
+          "id": "extract-mapper",
+          "text": "建议提取 DTO Mapper（手写或 MapStruct）替代手工字段拷贝",
+          "type": "process"
+        },
+        {
+          "id": "http-contract-preserved",
+          "text": "明确说明保持 HTTP 契约（路径、请求体、响应格式）不变",
+          "type": "constraint"
+        }
+      ]
+    }
+  ]
+}
