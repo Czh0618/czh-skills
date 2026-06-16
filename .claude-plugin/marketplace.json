@@ -1,0 +1,26 @@
+{
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "name": "czh-skills",
+  "owner": {
+    "name": "chenzhihua"
+  },
+  "metadata": {
+    "description": "Personal Claude Code plugin marketplace for reusable skills and workflow plugins."
+  },
+  "plugins": [
+    {
+      "name": "ccgs-game-studio",
+      "source": "./plugins/ccgs-game-studio",
+      "description": "Claude Code Game Studios packaged as an installable plugin with game-development workflow skills, specialist agents, templates, hooks, rules, and Unity/Unreal/Godot/Cocos references.",
+      "category": "development",
+      "tags": [
+        "game-development",
+        "cocos-creator",
+        "claude-code",
+        "skills",
+        "agents",
+        "workflow"
+      ]
+    }
+  ]
+}

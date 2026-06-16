@@ -1,0 +1,20 @@
+{
+  "name": "czh-skills",
+  "interface": {
+    "displayName": "CZH Skills"
+  },
+  "plugins": [
+    {
+      "name": "ccgs-game-studio",
+      "source": {
+        "source": "local",
+        "path": "./plugins/ccgs-game-studio"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Engineering"
+    }
+  ]
+}

@@ -1,0 +1,22 @@
+{
+  "name": "ccgs-game-studio",
+  "version": "0.1.0",
+  "description": "Claude Code Game Studios packaged as a Claude Code plugin: 73 game-development workflow skills, 50 specialist agents, hooks, rules, templates, and Unity/Unreal/Godot/Cocos engine references.",
+  "author": {
+    "name": "chenzhihua"
+  },
+  "homepage": "https://github.com/Donchitos/Claude-Code-Game-Studios",
+  "repository": "https://github.com/Czh0618/czh-skills",
+  "license": "MIT",
+  "keywords": [
+    "claude-code",
+    "plugin",
+    "game-development",
+    "game-studio",
+    "cocos",
+    "cocos-creator",
+    "skills",
+    "agents",
+    "workflow"
+  ]
+}

@@ -1,0 +1,45 @@
+{
+  "name": "ccgs-game-studio",
+  "version": "0.1.0",
+  "description": "Claude Code Game Studios packaged for Codex-compatible plugin loading: game-development workflow skills, specialist agents, templates, hooks, rules, and Unity/Unreal/Godot/Cocos engine references.",
+  "author": {
+    "name": "chenzhihua"
+  },
+  "homepage": "https://github.com/Donchitos/Claude-Code-Game-Studios",
+  "repository": "https://github.com/Czh0618/czh-skills",
+  "license": "MIT",
+  "keywords": [
+    "codex",
+    "plugin",
+    "game-development",
+    "game-studio",
+    "cocos",
+    "cocos-creator",
+    "skills",
+    "agents",
+    "workflow"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "CCGS Game Studio",
+    "shortDescription": "Game studio workflow skills and agents",
+    "longDescription": "Claude Code Game Studios turns an agent session into a structured game development studio with workflow skills, specialist agents, review gates, templates, hooks, rules, and engine references for Unity, Unreal, Godot, and Cocos Creator. This package keeps the original Claude Code assets bundled while exposing the skills through Codex-compatible plugin discovery.",
+    "developerName": "chenzhihua",
+    "category": "Engineering",
+    "capabilities": [
+      "Read",
+      "Write",
+      "Interactive"
+    ],
+    "websiteURL": "https://github.com/Donchitos/Claude-Code-Game-Studios",
+    "privacyPolicyURL": "https://github.com/Donchitos/Claude-Code-Game-Studios",
+    "termsOfServiceURL": "https://github.com/Donchitos/Claude-Code-Game-Studios",
+    "defaultPrompt": [
+      "Start a new game studio workflow",
+      "Review my game development phase",
+      "Plan the next game sprint"
+    ],
+    "brandColor": "#2563EB",
+    "screenshots": []
+  }
+}
