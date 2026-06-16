@@ -66,13 +66,3 @@ claude --plugin-dir plugins/ccgs-game-studio
 codex plugin marketplace add .
 codex plugin add ccgs-game-studio@czh-skills
 ```
-
-### npx skills 入口
-
-如果只想通过 `npx skills` 发现安装说明，可只安装 bootstrap skill：
-
-```bash
-npx skills add <repo> --skill ccgs-game-studio -a claude-code
-```
-
-完整 CCGS 能力请使用上面的 Claude Code Plugin 或 Codex Plugin 安装方式。
