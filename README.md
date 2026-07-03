@@ -9,6 +9,7 @@
 | [req-reverse-eng](skills/req-reverse-eng/) | AI 需求反向工程 — 将模糊的产品需求转化为结构化的选择题清单、决策矩阵和策略模式代码骨架 | `/req-reverse-eng` |
 | [api-blame-solver](skills/api-blame-solver/) | 前后端联调排错专家 | `/api-blame-solver` |
 | [java-refactor](skills/java-refactor/) | Java 代码重构教练 — 基于 Fowler《重构》与 Martin《代码整洁之道》的系统化诊断 + 排序后的可执行重构步骤；含 Feathers 遗留代码、Effective Java、DDD 战术补充章节 | `/java-refactor` |
+| [mysql-cli](skills/mysql-cli/) | Agent 优先的 MySQL 安全查询 CLI：默认只读、结构化 JSON 输出、profile 管理和 schema 探索 | `/mysql-cli` |
 | [ccgs-game-studio](skills/ccgs-game-studio/) | Claude Code Game Studios 插件安装入口；完整能力打包在 `plugins/ccgs-game-studio/` | `/ccgs-game-studio` |
 
 ## Plugins
@@ -48,7 +49,7 @@ skills。这些 workflow skills 依赖插件内的 agents、templates、hooks、
 在本仓库根目录运行：
 
 ```bash
-claude plugin marketplace add .
+claude plugin marketplace add git@github.com:Czh0618/czh-skills.git --scope user
 claude plugin install ccgs-game-studio@czh-skills
 ```
 

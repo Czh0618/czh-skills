@@ -1,0 +1,39 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "mydb-cli"
+version = "0.1.0"
+description = "An agent-first MySQL CLI — read-only by default, structured envelope output"
+readme = "SKILL.md"
+requires-python = ">=3.10"
+license = "MIT"
+authors = [{ name = "chenzhihua" }]
+keywords = ["mysql", "cli", "database", "agent", "read-only"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Environment :: Console",
+    "Programming Language :: Python :: 3",
+    "Topic :: Database",
+    "Topic :: Utilities",
+]
+dependencies = [
+    "click>=8.0",
+    "rich>=13.0",
+    "PyMySQL>=1.1",
+    "PyYAML>=6.0",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8.0"]
+
+[project.scripts]
+mydb = "mydb_cli.cli:cli"
+
+[tool.hatch.build.targets.wheel]
+packages = ["mydb_cli"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
