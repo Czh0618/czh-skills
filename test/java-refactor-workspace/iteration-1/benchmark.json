@@ -1,0 +1,567 @@
+{
+  "metadata": {
+    "skill_name": "java-refactor",
+    "skill_path": "<path/to/skill>",
+    "executor_model": "<model-name>",
+    "analyzer_model": "<model-name>",
+    "timestamp": "2026-05-19T06:18:41Z",
+    "evals_run": [
+      0,
+      1,
+      2,
+      3,
+      4
+    ],
+    "runs_per_configuration": 3
+  },
+  "runs": [
+    {
+      "eval_id": 0,
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 1.0,
+        "passed": 6,
+        "failed": 0,
+        "total": 6,
+        "time_seconds": 364.5,
+        "tokens": 70374,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "smell-anemic",
+          "passed": true,
+          "evidence": "\u8bca\u65ad #1 \u8d2b\u8840\u6a21\u578b Anemic Domain Model\uff0c\u4e25\u91cd\u5ea6\u9ad8\uff0c\u5f15\u7528 Order \u4ec5 getter/setter + \u4e1a\u52a1\u89c4\u5219\u5168\u5728 OrderService"
+        },
+        {
+          "text": "smell-type-code",
+          "passed": true,
+          "evidence": "\u8bca\u65ad #2 \u7c7b\u578b\u7801 Integer status\uff080/1/2/3\uff09\uff0c\u4e25\u91cd\u5ea6\u9ad8\uff0c\u5efa\u8bae Replace Type Code with Enum 'OrderStatus'"
+        },
+        {
+          "text": "smell-money-vo",
+          "passed": true,
+          "evidence": "\u8bca\u65ad #3 \u6570\u636e\u6ce5\u56e2 + \u57fa\u672c\u7c7b\u578b\u504f\u6267\uff0camount + currency\uff0c\u5efa\u8bae Introduce Value Object Money\uff08\u4e0d\u53ef\u53d8 record + add/multiply\uff09"
+        },
+        {
+          "text": "move-method-to-entity",
+          "passed": true,
+          "evidence": "\u8bca\u65ad #4 \u72b6\u6001\u673a\u6563\u843d + #5 calculateTotal \u5e94\u5728\u5b9e\u4f53\u4e0a\uff0c\u660e\u786e\u5efa\u8bae Move Method\uff08pay/cancel/calculateTotal \u4ece Service \u642c\u5165 Order\uff09"
+        },
+        {
+          "text": "ddd-tactical-reference",
+          "passed": true,
+          "evidence": "\u8bca\u65ad\u62a5\u544a\u4e0e\u8def\u7ebf\u56fe\u53cd\u590d\u5f15\u7528 references/ddd-tactical.md \u7684 \u00a7Entity / \u00a7Value Object / \u00a7\u8d2b\u8840\u2192\u5145\u8840 \u9636\u6bb5 1-3 / \u00a7\u8fc7\u5ea6\u8bbe\u8ba1\u8b66\u544a"
+        },
+        {
+          "text": "complexity-warning",
+          "passed": true,
+          "evidence": "step1 \u4e2d\u4e13\u95e8\u6709'\u26a0\ufe0f \u8fc7\u5ea6\u8bbe\u8ba1\u8b66\u544a\uff08DDD \u5316\u51b3\u7b56\u70b9\uff09'\u8868\u683c\uff0c\u6309 ddd-tactical.md \u00a7\u8fc7\u5ea6\u8bbe\u8ba1\u8b66\u544a \u5224\u5b9a\u6e05\u5355\u8bc4\u4f30\uff0c\u7ed3\u8bba\uff1a\u5f53\u524d\u53ea 0-1 \u9879\u660e\u786e\u4e3a'\u662f'\uff0c\u5efa\u8bae\u9636\u6bb5 4-6 \u6682\u7f13\uff1b\u8fd8\u660e\u786e\u5efa\u8bae\u5148\u8d70 /req-reverse-eng \u6f84\u6e05"
+        }
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": 1,
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 1.0,
+        "passed": 6,
+        "failed": 0,
+        "total": 6,
+        "time_seconds": 254.7,
+        "tokens": 61519,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "smell-fat-controller",
+          "passed": true,
+          "evidence": "\u8bca\u65ad #1 Fat Controller / \u4e1a\u52a1\u903b\u8f91\u6cc4\u9732\u5230 Web \u5c42\uff0c\u4e25\u91cd\u5ea6\u9ad8\uff0c\u5f15\u7528 'create \u65b9\u6cd5\u627f\u62c5\u5ba2\u6237\u67e5\u8be2 / \u5e93\u5b58\u4e0e\u4ef7\u683c\u8ba1\u7b97 / \u8ba2\u5355\u843d\u5e93\u7b49\u4e1a\u52a1\u7f16\u6392'"
+        },
+        {
+          "text": "layer-violation",
+          "passed": true,
+          "evidence": "\u8bca\u65ad #2 \u5206\u5c42\u6cc4\u9732 Layer Violation\uff0c\u4e25\u91cd\u5ea6\u9ad8\uff0c\u660e\u786e\u6307\u51fa 'Controller \u76f4\u63a5 @Autowired \u6ce8\u5165 OrderMapper / CustomerMapper / ProductMapper\uff0c\u7ed5\u8fc7 Service \u5c42'"
+        },
+        {
+          "text": "extract-service",
+          "passed": true,
+          "evidence": "\u8bca\u65ad #1 \u63a8\u8350\u624b\u6cd5 'Extract Class \u2192 OrderService\uff1bMove Method \u628a\u4e1a\u52a1\u642c\u5230 Service'\uff1b\u8bca\u65ad #2 \u63a8\u8350 'Move Field\uff08Mapper \u6ce8\u5165\u4e0b\u6c89\u5230 Service\uff09'"
+        },
+        {
+          "text": "controller-advice",
+          "passed": true,
+          "evidence": "\u8bca\u65ad #3 \u5f15\u5165 @Valid + Bean Validation \u6ce8\u89e3\uff1b\u8bca\u65ad #4 \u81ea\u5b9a\u4e49\u4e1a\u52a1\u5f02\u5e38 + @ControllerAdvice + @ExceptionHandler \u96c6\u4e2d\u5904\u7406"
+        },
+        {
+          "text": "extract-mapper",
+          "passed": true,
+          "evidence": "\u8bca\u65ad #5 Extract Class \u2192 OrderDtoMapper\uff08\u624b\u5199\u6216 MapStruct\uff09\uff1breq \u2192 Order\u3001Order + Customer \u2192 VO \u4e24\u4e2a\u6620\u5c04\u65b9\u6cd5"
+        },
+        {
+          "text": "http-contract-preserved",
+          "passed": true,
+          "evidence": "Step 0 \u4e0a\u4e0b\u6587\u6458\u8981'API \u53d8\u66f4'\u9879\u660e\u786e\uff1a\u5fc5\u987b\u4fdd\u6301 HTTP \u5951\u7ea6\u4e0d\u53d8 \u2014 \u8def\u5f84 POST /api/orders\u3001\u8bf7\u6c42\u4f53 OrderRequest\u3001\u54cd\u5e94 OrderResponseVO JSON \u7ed3\u6784\u3001HTTP \u72b6\u6001\u7801\u3001\u9519\u8bef\u54cd\u5e94\u4f53\u5f62\u6001 {error:...}"
+        }
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": 2,
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 1.0,
+        "passed": 6,
+        "failed": 0,
+        "total": 6,
+        "time_seconds": 336.3,
+        "tokens": 67374,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "smell-god-class",
+          "passed": true,
+          "evidence": "\u8bca\u65ad #1 \u4e0a\u5e1d\u7c7b UserService\uff0c\u4e25\u91cd\u5ea6\u9ad8\uff0c\u5f15\u7528 700+ \u884c / 16 \u65b9\u6cd5 / 11 \u5b57\u6bb5\u4f5c\u4e3a\u8bc1\u636e"
+        },
+        {
+          "text": "smell-divergent-change",
+          "passed": true,
+          "evidence": "\u8bca\u65ad #2 \u53d1\u6563\u5f0f\u53d8\u5316\uff0c\u4e25\u91cd\u5ea6\u9ad8\uff0c\u660e\u786e\u6307\u51fa 4 \u4e2a\u5b50\u57df\u5206\u7ec4\uff08\u7528\u6237/\u89d2\u8272\u6743\u9650/\u5ba1\u8ba1/\u901a\u77e5\uff09"
+        },
+        {
+          "text": "split-by-subdomain",
+          "passed": true,
+          "evidence": "step2-roadmap.md \u4e2d\u6309 User / Permission / Audit / Notification \u62c6\u5206\u4e3a 4 \u4e2a @Service Bean"
+        },
+        {
+          "text": "spring-warnings",
+          "passed": true,
+          "evidence": "\u8bca\u65ad #6 \u8fc7\u5bbd @Transactional\u3001#7 AOP self-invocation \u5931\u6548\u3001#8 \u8de8\u5b50\u57df\u6570\u636e\u8026\u5408\u5747\u5217\u51fa\uff1b\u603b\u4f53\u89c2\u5bdf 3\u30014 \u8be6\u7ec6\u8ba8\u8bba\u4e8b\u52a1\u8fb9\u754c\u53d8\u5316\u4e0e AOP \u98ce\u9669"
+        },
+        {
+          "text": "split-order",
+          "passed": true,
+          "evidence": "\u603b\u4f53\u89c2\u5bdf 2 \u660e\u786e\u7ed9\u51fa\u987a\u5e8f\uff1a'\u901a\u77e5\u548c\u5ba1\u8ba1\u662f\u53f6\u5b50\u5b50\u57df\u5e94\u5148\u62c6\uff1b\u89d2\u8272\u6743\u9650\u662f\u4e2d\u95f4\u5c42\uff1b\u7528\u6237\u57fa\u7840\u6700\u540e\u5b9a\u578b'"
+        },
+        {
+          "text": "circular-dep-check",
+          "passed": true,
+          "evidence": "\u603b\u4f53\u89c2\u5bdf 4 \u5355\u72ec\u7ae0\u8282'\u5faa\u73af\u4f9d\u8d56\u9884\u9632'\uff0c\u5efa\u8bae\u62c6\u5206\u540e\u4e0d\u5e94\u53cd\u5411\u6ce8\u5165 UserService\uff0c\u5fc5\u8981\u65f6\u901a\u8fc7 ApplicationEvent \u89e3\u8026"
+        }
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": 3,
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 1.0,
+        "passed": 6,
+        "failed": 0,
+        "total": 6,
+        "time_seconds": 220.6,
+        "tokens": 57125,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "warn-no-tests",
+          "passed": true,
+          "evidence": "step2-roadmap.md \u5f00\u5934'\u4e25\u6b63\u8b66\u793a'\u660e\u786e\u8b66\u793a\uff1a\u4e0d\u8981\u76f4\u63a5\u5728 calculate(...) \u65b9\u6cd5\u91cc\u52a0 if \u5904\u7406\u5730\u533a\u6298\u6263\uff0c\u7406\u7531 1 \u5373'\u65e0\u6d4b\u8bd5'"
+        },
+        {
+          "text": "characterization-test",
+          "passed": true,
+          "evidence": "\u8def\u7ebf\u56fe Step 2 '\u7279\u5f81\u5316\u6d4b\u8bd5\uff08Characterization Test\uff09\u2014 \u8986\u76d6\u73b0\u6709 5 \u6761\u5206\u652f\u8def\u5f84'\uff0c\u76ee\u6807\u662f\u56fa\u5316\u52a8\u4e4b\u524d\u7684\u884c\u4e3a\u4f5c\u4e3a\u5b89\u5168\u7f51"
+        },
+        {
+          "text": "dependency-breaking",
+          "passed": true,
+          "evidence": "\u8def\u7ebf\u56fe Step 1 '\u6253\u7834\u6700\u5c0f\u4f9d\u8d56\uff1aExtract Interface + \u6784\u9020\u5668\u6ce8\u5165\uff08DbConnection / ConfigLoader / Logger\uff09\u62bd 3 \u4e2a\u63a5\u7f1d\u63a5\u53e3'"
+        },
+        {
+          "text": "sprout-method",
+          "passed": true,
+          "evidence": "\u8def\u7ebf\u56fe Step 3 '**Sprout Method**\uff1a\u65b0\u589e applyRegionDiscount(BigDecimal current, String region) \u72ec\u7acb\u65b9\u6cd5\uff0c\u72ec\u7acb TDD \u7f16\u5199'"
+        },
+        {
+          "text": "no-direct-rewrite",
+          "passed": true,
+          "evidence": "\u4e25\u6b63\u8b66\u793a\u660e\u786e\u53cd\u5bf9\u76f4\u63a5 if \u5806\u53e0\uff1b'\u4e0d\u63a8\u8350\u8fd1\u671f\u505a'\u7ae0\u8282\u660e\u786e\u8b66\u793a'\u6574\u4f53\u91cd\u5199\u4f1a\u4e22\u5931\u9690\u5f0f\u7684\u4e1a\u52a1\u89c4\u5219'"
+        },
+        {
+          "text": "step-sequence",
+          "passed": true,
+          "evidence": "Feathers \u63a8\u8350\u987a\u5e8f\u660e\u786e\uff1a\u6253\u7834\u4f9d\u8d56 \u2192 \u52a0\u6d4b\u8bd5 \u2192 Sprout Method \u2192 \u5355\u70b9\u63a5\u5165 \u2192 Enum/Constant/Extract Method \u6ede\u540e\uff1b\u6b65\u9aa4 5-7 \u7559\u5f85\u540e\u7eed\u4e0d\u963b\u585e\u5f53\u524d\u4efb\u52a1"
+        }
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": 4,
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 1.0,
+        "passed": 8,
+        "failed": 0,
+        "total": 8,
+        "time_seconds": 335.4,
+        "tokens": 59640,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "step-zero-boundary",
+          "passed": true,
+          "evidence": "step1-diagnosis.md \u5f00\u5934\u6709 'Step 0 \u4e0a\u4e0b\u6587\u56de\u987e'\u8868\u683c\uff0c\u5305\u542b\u8303\u56f4/\u6d4b\u8bd5\u8986\u76d6/API \u53d8\u66f4/\u6280\u672f\u6808/\u98ce\u9669\u6807\u8bb0 5 \u5217"
+        },
+        {
+          "text": "diagnosis-table-format",
+          "passed": true,
+          "evidence": "\u8bca\u65ad\u62a5\u544a\u4ee5 Markdown \u8868\u683c\u8f93\u51fa\uff0c\u5217\u542b # / \u574f\u5473\u9053 / \u5168\u5c40\u89c4\u5219\u6620\u5c04 / \u4f4d\u7f6e / \u4e25\u91cd\u5ea6 / \u63a8\u8350\u624b\u6cd5 / \u4f30\u7b97\u5de5\u4f5c\u91cf / \u4f9d\u8d56\u524d\u7f6e\uff0c\u5171\u8bc6\u522b 12 \u9879\u95ee\u9898"
+        },
+        {
+          "text": "smell-long-method",
+          "passed": true,
+          "evidence": "\u8bca\u65ad #1 \u957f\u65b9\u6cd5 placeOrder\uff0c\u4e25\u91cd\u5ea6\u9ad8\uff0c\u7ea6 90 \u884c\u627f\u62c5 7 \u4e2a\u804c\u8d23"
+        },
+        {
+          "text": "smell-data-clump",
+          "passed": true,
+          "evidence": "\u8bca\u65ad #2 \u6570\u636e\u6ce5\u56e2 province/city/district/detail\uff0c\u4e25\u91cd\u5ea6\u9ad8\uff0c\u5efa\u8bae Introduce Parameter Object 'ShippingAddress' record"
+        },
+        {
+          "text": "smell-hard-coded-new",
+          "passed": true,
+          "evidence": "\u8bca\u65ad #3 \u786c\u7f16\u7801 new SmtpEmailSender()\uff0c\u4e25\u91cd\u5ea6\u9ad8\uff0c\u5efa\u8bae Extract Interface EmailSender + \u6784\u9020\u5668\u6ce8\u5165"
+        },
+        {
+          "text": "test-first",
+          "passed": true,
+          "evidence": "\u8def\u7ebf\u56fe\u6b65\u9aa4 1 \u5373'\u8865 placeOrder \u7279\u5f81\u5316\u6d4b\u8bd5'\uff0c\u660e\u786e\u6807\u6ce8 '\u7981\u6b62\u8df3\u8fc7\u76f4\u63a5\u8fdb\u5165\u6b65\u9aa4 2'"
+        },
+        {
+          "text": "step-atomic",
+          "passed": true,
+          "evidence": "step3-steps.md \u4e2d\u91cd\u6784\u6b65\u9aa4 #1 \u5305\u542b\u5f71\u54cd\u8303\u56f4 / \u524d\u7f6e\u6761\u4ef6 / Before / After / Feathers mechanics / \u9a8c\u8bc1\uff08\u542b\u5177\u4f53\u6d4b\u8bd5\u547d\u4ee4\uff09/ \u56de\u6eda\u7b56\u7565\uff0c\u6bcf\u6b65\u72ec\u7acb\u53ef commit"
+        },
+        {
+          "text": "no-auto-edit",
+          "passed": true,
+          "evidence": "subagent \u53ea Write \u4e09\u4e2a markdown \u8f93\u51fa\u6587\u4ef6\uff0c\u672a\u5bf9\u7528\u6237\u6e90\u4ee3\u7801\u505a Edit \u6216 Write"
+        }
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": 0,
+      "configuration": "without_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 1.0,
+        "passed": 6,
+        "failed": 0,
+        "total": 6,
+        "time_seconds": 432.7,
+        "tokens": 46780,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "smell-anemic",
+          "passed": true,
+          "evidence": "\u8bca\u65ad\u8868\u7b2c 1 \u9879\u8d2b\u8840\u6a21\u578b Anemic Domain Model\uff0c\u4e25\u91cd\u5ea6\u9ad8"
+        },
+        {
+          "text": "smell-type-code",
+          "passed": true,
+          "evidence": "\u8bca\u65ad\u8868\u7b2c 2 \u9879\u7c7b\u578b\u7801\u53cd\u6a21\u5f0f Order.status: Integer\uff0c\u4e25\u91cd\u5ea6\u9ad8\uff0c\u5efa\u8bae enum"
+        },
+        {
+          "text": "smell-money-vo",
+          "passed": true,
+          "evidence": "\u8bca\u65ad\u8868\u7b2c 3 \u9879\u6570\u636e\u6ce5\u56e2 amount + currency\uff0c\u5efa\u8bae Money \u503c\u5bf9\u8c61\uff1bStep 3 \u8be6\u7ec6\u5c55\u5f00\u4e86 record Money \u5b9e\u73b0"
+        },
+        {
+          "text": "move-method-to-entity",
+          "passed": true,
+          "evidence": "Step 4 / Step 5 \u660e\u786e\u8bf4\u660e Move Method \u628a calculateTotal / pay / cancel \u642c\u5165 Order \u5b9e\u4f53\uff1bAfter \u4ee3\u7801\u5c55\u793a\u884c\u4e3a\u4e0b\u6c89\u5230 Order"
+        },
+        {
+          "text": "ddd-tactical-reference",
+          "passed": true,
+          "evidence": "\u516d\u3001DDD \u6218\u672f\u6a21\u5f0f\u53c2\u8003\u7ae0\u8282\u5f15\u7528 Value Object / Entity / Aggregate Root / Domain Service / Application Service / Move Method / Characterization Test \u591a\u4e2a DDD \u6218\u672f\u6982\u5ff5"
+        },
+        {
+          "text": "complexity-warning",
+          "passed": true,
+          "evidence": "\u4e8c\u3001\u524d\u7f6e\u63d0\u9192\uff1a\u662f\u5426\u503c\u5f97 DDD \u5316\uff1f\u7ae0\u8282\u660e\u786e\u7ed9\u51fa 4 \u9879\u8bc4\u4f30\u6807\u51c6\uff0c\u63d0\u51fa'\u8f7b\u5ea6\u5145\u8840'\u65b9\u6848\u5e76\u5f3a\u70c8\u5efa\u8bae\u5148\u7528 /req-reverse-eng \u628a\u72b6\u6001\u673a\u548c\u4e0d\u53d8\u91cf\u68b3\u7406\u6e05\u695a"
+        }
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": 1,
+      "configuration": "without_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 1.0,
+        "passed": 6,
+        "failed": 0,
+        "total": 6,
+        "time_seconds": 484.4,
+        "tokens": 48946,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "smell-fat-controller",
+          "passed": true,
+          "evidence": "\u8bca\u65ad\u8868\u7b2c 1 \u9879 Fat Controller\uff0c\u4e25\u91cd\u5ea6\u9ad8\uff0c\u6b63\u786e\u6307\u51fa Controller \u627f\u62c5\u975e HTTP \u804c\u8d23"
+        },
+        {
+          "text": "layer-violation",
+          "passed": true,
+          "evidence": "\u8bca\u65ad\u8868\u7b2c 2 \u9879 Layer Violation\uff0c\u4e25\u91cd\u5ea6\u9ad8\uff0c\u5f15\u7528 @Autowired OrderMapper / CustomerMapper / ProductMapper \u4f5c\u4e3a\u8bc1\u636e"
+        },
+        {
+          "text": "extract-service",
+          "passed": true,
+          "evidence": "Step 4 '\u62bd\u53d6 OrderService.createOrder(OrderRequest)\uff0c\u8fc1\u51fa\u67e5\u8be2/\u8ba1\u7b97/\u843d\u5e93'\uff0c\u7ed9\u51fa conceptual After \u4ee3\u7801"
+        },
+        {
+          "text": "controller-advice",
+          "passed": true,
+          "evidence": "Step 2 '\u5f15\u5165 @ControllerAdvice + \u9886\u57df\u5f02\u5e38'\uff1bStep 3 '\u52a0 Bean Validation \u6ce8\u89e3 + @Valid'\uff1bStep 3 \u8be6\u7ec6\u5c55\u5f00\u5305\u542b @ControllerAdvice \u914d\u7f6e\u793a\u4f8b"
+        },
+        {
+          "text": "extract-mapper",
+          "passed": true,
+          "evidence": "Step 6 '\u5f15\u5165 OrderAssembler \u6216 MapStruct'\uff1b\u4e94\u3001\u98ce\u9669\u4e0e\u63d0\u793a\u4e2d\u8ba8\u8bba 'MapStruct \u9002\u5408 >5 \u5b57\u6bb5\uff1b\u5b57\u6bb5\u5c11\u65f6\u624b\u5199 Assembler \u66f4\u8f7b\u91cf'"
+        },
+        {
+          "text": "http-contract-preserved",
+          "passed": true,
+          "evidence": "Step 3 \u7ae0\u8282\u660e\u786e\uff1a'\u54cd\u5e94\u4f53\u5f62\u72b6 {error:...} \u4fdd\u6301\u4e0d\u53d8'\uff1b\u516d\u3001\u9a8c\u6536\u6e05\u5355\u6700\u540e\u4e00\u9879 'HTTP \u5951\u7ea6\uff08path / payload / response shape\uff09\u96f6\u53d8\u66f4'"
+        }
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": 2,
+      "configuration": "without_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 1.0,
+        "passed": 6,
+        "failed": 0,
+        "total": 6,
+        "time_seconds": 173.4,
+        "tokens": 39274,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "smell-god-class",
+          "passed": true,
+          "evidence": "\u8bca\u65ad\u8868\u7b2c 1 \u9879 God Class\uff0c\u4e25\u91cd\u5ea6\u9ad8\uff0c\u5f15\u7528 700+ \u884c / 11 \u4f9d\u8d56 / 4 \u5b50\u57df\u4f5c\u4e3a\u8bc1\u636e"
+        },
+        {
+          "text": "smell-divergent-change",
+          "passed": true,
+          "evidence": "\u8bca\u65ad\u8868\u7b2c 2 \u9879 Divergent Change\uff0c\u4e25\u91cd\u5ea6\u9ad8\uff0c\u660e\u786e\u8bf4\u660e\u4efb\u4e00\u5b50\u57df\u53d8\u66f4\u90fd\u4f1a\u6539\u8fd9\u4e2a\u7c7b"
+        },
+        {
+          "text": "split-by-subdomain",
+          "passed": true,
+          "evidence": "\u4e8c\u3001\u62c6\u5206\u76ee\u6807\u67b6\u6784\u6309 User / Permission / Audit / Notification 4 \u4e2a Service + \u53ef\u9009 Facade \u62c6\u5206\uff0c\u7ed8\u51fa\u4f9d\u8d56 DAG"
+        },
+        {
+          "text": "spring-warnings",
+          "passed": true,
+          "evidence": "\u56db\u3001Spring \u7279\u5b9a\u98ce\u9669\u7ae0\u8282\u975e\u5e38\u8be6\u7ec6\uff1a1. @Transactional \u8fb9\u754c\u53d8\u5316\uff08self-invocation\uff09\u30012. AOP \u5207\u9762\u5f71\u54cd\u30013. \u6ce8\u5165\u70b9\u53d8\u5316\u30014. \u5faa\u73af\u4f9d\u8d56\u9884\u9632\u30015. \u6d4b\u8bd5\u8986\u76d6\u30016. MyBatis \u76f8\u5173"
+        },
+        {
+          "text": "split-order",
+          "passed": true,
+          "evidence": "\u4e09\u3001\u62c6\u5206\u8def\u7ebf\u56fe\u6309 Step 1 Audit\uff08\u53f6\u5b50\uff09\u2192 Step 2 Notification\uff08\u53f6\u5b50\uff09\u2192 Step 3 Permission\uff08\u4e2d\u95f4\u5c42\uff09\u2192 Step 4 UserService \u7626\u8eab\uff0c\u4f9d\u8d56\u6392\u5e8f\u6e05\u6670"
+        },
+        {
+          "text": "circular-dep-check",
+          "passed": true,
+          "evidence": "\u56db.4 \u5faa\u73af\u4f9d\u8d56\u9884\u9632\u7ae0\u8282\u5177\u4f53\u8ba8\u8bba PermissionService \u2194 UserService \u548c NotificationService \u2194 UserService \u4e24\u79cd\u5faa\u73af\u573a\u666f\uff0c\u5e76\u7ed9\u51fa\u65b9\u6848 A\uff08\u4e8b\u4ef6\uff09\u548c\u65b9\u6848 B\uff08\u53ea\u8bfb\u63a5\u53e3\uff09"
+        }
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": 3,
+      "configuration": "without_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 1.0,
+        "passed": 6,
+        "failed": 0,
+        "total": 6,
+        "time_seconds": 162.2,
+        "tokens": 39010,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "warn-no-tests",
+          "passed": true,
+          "evidence": "\u4e00\u53e5\u8bdd\u56de\u7b54'\u5f3a\u70c8\u4e0d\u5efa\u8bae\u76f4\u63a5\u5728 calculate \u91cc\u52a0\u51e0\u884c if \u5904\u7406\u5730\u533a'\uff1b\u4e8c\u3001\u7ae0\u8282'\u4e3a\u4ec0\u4e48\u4e0d\u80fd\u76f4\u63a5\u52a0\u51e0\u884c if'\u7ed9\u51fa 4 \u6761\u7406\u7531"
+        },
+        {
+          "text": "characterization-test",
+          "passed": true,
+          "evidence": "Step 1 \u5373'\u5148\u505a\u7279\u5f81\u5316\u6d4b\u8bd5\uff08Characterization Test\uff09\u56fa\u5316\u5f53\u524d\u884c\u4e3a'\uff0c\u8be6\u7ec6\u5217\u51fa\u9ec4\u91d1\u503c\u8986\u76d6\u8303\u56f4\uff08\u5404\u7b49\u7ea7\u3001\u5404\u54c1\u7c7b\u3001\u5c01\u9876\u3001\u8fb9\u754c\u503c\uff09"
+        },
+        {
+          "text": "dependency-breaking",
+          "passed": true,
+          "evidence": "Step 2 '\u6253\u7834\u4f9d\u8d56\uff08Break Dependencies\uff09\u2014\u2014 Extract Interface'\uff0c\u660e\u786e\u628a DbConnection / ConfigLoader / Logger \u62bd\u6210\u63a5\u53e3 + \u6784\u9020\u5668\u6ce8\u5165"
+        },
+        {
+          "text": "sprout-method",
+          "passed": true,
+          "evidence": "Step 3 '\u7528 Sprout Method \u52a0\u6309\u5730\u533a\u6298\u6263\u65b0\u529f\u80fd'\uff0c\u660e\u786e\u5f15\u7528 Feathers \u7b2c 6 \u7ae0 Sprout Method / Sprout Class\uff0c\u5e76\u7ed9\u51fa\u4f2a\u4ee3\u7801\u4e0e\u7b56\u7565\u5347\u7ea7\u8def\u5f84"
+        },
+        {
+          "text": "no-direct-rewrite",
+          "passed": true,
+          "evidence": "\u4e94\u3001\u7ed9\u56e2\u961f\u7684'\u4e0d\u8981\u505a'\u6e05\u5355\u660e\u786e\u53cd\u5bf9'\u91cd\u5199\u4e00\u904d\u66f4\u5feb'\uff0c\u5f15\u7528'\u91cd\u5199\u4f1a\u4e22\u5931\u9690\u6027\u4e1a\u52a1\u89c4\u5219'\uff1b\u603b\u7ed3\u8868\u683c\u660e\u786e\u6bcf\u4e00\u6b65\u53ef\u56de\u6eda"
+        },
+        {
+          "text": "step-sequence",
+          "passed": true,
+          "evidence": "\u4e09\u3001\u5b89\u5168\u6539\u9020\u8def\u7ebf\u56fe 3 \u6b65\u8d70\uff1aStep 1 \u7279\u5f81\u5316\u6d4b\u8bd5 \u2192 Step 2 \u6253\u7834\u4f9d\u8d56 \u2192 Step 3 Sprout Method\uff1b\u516d\u3001\u603b\u7ed3\u4e00\u53e5\u8bdd\uff1a'\u5148\u5efa\u7f51\u3001\u518d\u6362\u6869\u3001\u6700\u540e\u957f\u82bd'"
+        }
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": 4,
+      "configuration": "without_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 0.875,
+        "passed": 7,
+        "failed": 1,
+        "total": 8,
+        "time_seconds": 681.5,
+        "tokens": 55450,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "step-zero-boundary",
+          "passed": false,
+          "evidence": "Step 0 '\u5bf9\u9f50\u8303\u56f4'\u4ec5\u5728\u8def\u7ebf\u56fe\u672b\u5c3e\u4f5c\u4e3a\u4e00\u53e5\u8bdd\u63d0\u5230 5 \u4e2a\u95ee\u9898\uff0c\u672a\u5f62\u6210\u6b63\u5f0f\u4e0a\u4e0b\u6587\u6458\u8981\uff1b\u6ca1\u6709\u6309 skill \u534f\u8bae\u5148\u786e\u8ba4\u518d\u5f00\u59cb"
+        },
+        {
+          "text": "diagnosis-table-format",
+          "passed": true,
+          "evidence": "\u4e8c\u3001\u8bca\u65ad\u62a5\u544a\u7ae0\u8282\u6709\u5b8c\u6574 Markdown \u8868\u683c\uff0c\u5217\u542b\u574f\u5473\u9053 / \u4f4d\u7f6e / \u4e25\u91cd\u5ea6 / \u63a8\u8350\u624b\u6cd5 / \u5de5\u4f5c\u91cf / \u4f9d\u8d56\u524d\u7f6e\uff0c\u5171 10 \u9879"
+        },
+        {
+          "text": "smell-long-method",
+          "passed": true,
+          "evidence": "\u8bca\u65ad\u8868\u7b2c 1 \u9879 Long Method\uff0c\u4e25\u91cd\u5ea6\u9ad8\uff0c\u6b63\u786e\u6307\u5411 placeOrder"
+        },
+        {
+          "text": "smell-data-clump",
+          "passed": true,
+          "evidence": "\u8bca\u65ad\u8868\u7b2c 2\u30013 \u9879\u5206\u522b\u8bc6\u522b\u5730\u5740\u6570\u636e\u6ce5\u56e2\u4e0e\u91d1\u989d\u6570\u636e\u6ce5\u56e2\uff0c\u5efa\u8bae Address VO / OrderAmount VO"
+        },
+        {
+          "text": "smell-hard-coded-new",
+          "passed": true,
+          "evidence": "\u8bca\u65ad\u8868\u7b2c 6 \u9879\u8bc6\u522b\u786c\u7f16\u7801 new SmtpEmailSender\uff0c\u5efa\u8bae Extract Interface + \u6784\u9020\u5668\u6ce8\u5165"
+        },
+        {
+          "text": "test-first",
+          "passed": true,
+          "evidence": "\u4e09\u3001\u8def\u7ebf\u56fe Step 1 \u5373'\u8865\u7279\u5f81\u5316\u6d4b\u8bd5\uff08\u5fc5\u987b\u6700\u5148\u505a\uff09'\uff0c\u660e\u786e\u5217\u51fa \u226512 \u6761\u7528\u4f8b"
+        },
+        {
+          "text": "step-atomic",
+          "passed": true,
+          "evidence": "Step 2\u3001Step 3 \u7ed9\u51fa\u4e86 Before / After / \u673a\u68b0\u5316\u6b65\u9aa4 / \u6d4b\u8bd5\u547d\u4ee4 / \u56de\u6eda\u7b56\u7565 / \u98ce\u9669\uff0c\u539f\u5b50\u5316\u5408\u683c\uff1b\u4f46\u4ec5\u5c55\u5f00 2 \u4e2a\u6b65\u9aa4\uff0cStep 4-9 \u4ec5\u7b80\u4ecb"
+        },
+        {
+          "text": "no-auto-edit",
+          "passed": true,
+          "evidence": "subagent \u672a\u7f16\u8f91\u7528\u6237\u6e90\u4ee3\u7801\uff08\u5b9e\u9645 Write \u88ab harness \u963b\u585e\uff0c\u4f46\u610f\u56fe\u660e\u786e\u4ec5\u8f93\u51fa\u5efa\u8bae\uff09"
+        }
+      ],
+      "notes": []
+    }
+  ],
+  "run_summary": {
+    "with_skill": {
+      "pass_rate": {
+        "mean": 1.0,
+        "stddev": 0.0,
+        "min": 1.0,
+        "max": 1.0
+      },
+      "time_seconds": {
+        "mean": 302.3,
+        "stddev": 61.3618,
+        "min": 220.6,
+        "max": 364.5
+      },
+      "tokens": {
+        "mean": 63206.4,
+        "stddev": 5506.6626,
+        "min": 57125,
+        "max": 70374
+      }
+    },
+    "without_skill": {
+      "pass_rate": {
+        "mean": 0.975,
+        "stddev": 0.0559,
+        "min": 0.875,
+        "max": 1.0
+      },
+      "time_seconds": {
+        "mean": 386.84,
+        "stddev": 220.4911,
+        "min": 162.2,
+        "max": 681.5
+      },
+      "tokens": {
+        "mean": 45892.0,
+        "stddev": 6939.5726,
+        "min": 39010,
+        "max": 55450
+      }
+    },
+    "delta": {
+      "pass_rate": "+0.03",
+      "time_seconds": "-84.5",
+      "tokens": "+17314"
+    }
+  },
+  "notes": []
+}

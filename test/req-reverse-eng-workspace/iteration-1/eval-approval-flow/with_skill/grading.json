@@ -1,0 +1,12 @@
+{
+  "eval_id": 2,
+  "run_id": "eval-approval-flow-with_skill",
+  "configuration": "with_skill",
+  "expectations": [
+    {"text": "format-quiz: 输出包含选择题/判断题格式", "passed": true, "evidence": "全部33个问题均为 [选择题] 或 [判断题] 格式"},
+    {"text": "dimension-state: 覆盖审批流状态流转", "passed": true, "evidence": "Q1 完整状态定义，Q2 拒绝后重提，Q3 二级拒绝，Q4 撤销，Q5 销假，Q6 修改"},
+    {"text": "dimension-edge: 边界条件", "passed": true, "evidence": "Q7 >3判定，Q8 计算方式，Q9 半天请假，Q10 时间重叠，Q11 余额校验，Q12 并发审批，Q13 幂等，Q14 上限，Q15 跨月跨年"},
+    {"text": "no-code: 不含代码片段", "passed": true, "evidence": "全文无代码"},
+    {"text": "question-count: 8-20个问题", "passed": false, "evidence": "共33个问题，超出20个上限"}
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "eval_id": 1,
+  "run_id": "eval-coupon-system-without_skill",
+  "configuration": "without_skill",
+  "expectations": [
+    {"text": "format-quiz: 输出包含选择题/判断题格式", "passed": false, "evidence": "全部问题为 checklist 格式（- [ ]），无选择题/判断题，产品经理需要自行组织答案"},
+    {"text": "dimension-state: 覆盖优惠券状态流转", "passed": true, "evidence": "第2节详细列出了状态：未领取、已领取/未使用、已使用、已过期、已冻结、已作废"},
+    {"text": "dimension-edge: 至少3个边界条件", "passed": true, "evidence": "第6节并发控制，第11节边界场景汇总表列出8个场景"},
+    {"text": "dimension-permission: 角色与权限分析", "passed": false, "evidence": "第8节后台管理提到了审批流和操作日志，但未专门分析角色权限的阻断规则"},
+    {"text": "no-code: 不含代码片段", "passed": true, "evidence": "全文无代码"},
+    {"text": "question-count: 8-20个问题", "passed": false, "evidence": "约60+个问题，远超20个上限"}
+  ]
+}

@@ -1,0 +1,53 @@
+{
+  "expectations": [
+    {
+      "text": "明确判定为“单字段增减”，属于不需要完整流程的小改动",
+      "passed": true,
+      "evidence": "回复开头“不需要”，称单字段新增属于小改动，不建计划文件，不走评审门禁。"
+    },
+    {
+      "text": "不创建 .ai/test-plan.md，也不要求评审门禁或等待用户确认计划",
+      "passed": true,
+      "evidence": "明确不建 .ai/test-plan.md；outputs 下只有 response.md 和 timing.json。"
+    },
+    {
+      "text": "只给出少量 UNIT 场景（通常 1～3 条，覆盖 remark 往返、不传时为空、超过 200 字符返回 400），并说明放进 PR 描述，不凑数",
+      "passed": true,
+      "evidence": "给出 UNIT-01 超长边界（200 通过、201 返回 400 不截断）、UNIT-02 创建到详情带回、UNIT-03 不传 remark 照常创建，共 3 条，写明放 PR 描述，覆盖往返、可空、超长三点。"
+    },
+    {
+      "text": "不引入 E2E / 属性 / 差分场景，也不提出新增依赖",
+      "passed": true,
+      "evidence": "没有 E2E、属性、差分场景，也没有提出新增依赖；只提醒用真实库验证 mapper 列映射，沿用项目现有的 mapper 测试方式。"
+    },
+    {
+      "text": "只回答是否需要计划并给出场景，不写任何实现代码（迁移脚本、实体、Mapper、Service、测试类均不创建）",
+      "passed": true,
+      "evidence": "outputs 下只有 response.md，没有实现或测试文件；回复写明本 skill 只出场景，实现交给 dev。"
+    },
+    {
+      "text": "动手前列出连带改动点（列表和导出接口是否共用 VO、其他返回订单实体的接口、DDL 与迁移脚本、DTO/VO 转换），查不到代码时如实说明是待核对清单",
+      "passed": true,
+      "evidence": "列出 5 类连带改动点：创建 DTO 与校验、详情 VO、Mapper XML 与 DO 到 VO 转换、DDL 与迁移脚本、其他返回订单实体的接口（列表、导出、创建返回体、后台查询），并如实说明目标项目为空，没有在代码里核实。"
+    }
+  ],
+  "summary": {
+    "passed": 6,
+    "failed": 0,
+    "total": 6,
+    "pass_rate": 1.0
+  },
+  "eval_feedback": {
+    "suggestions": [
+      {
+        "assertion": "side-effects-listed",
+        "reason": "旧快照 skill-snapshot-v2 拍摄时已经包含列连带改动点的要求，所以新旧两边都过，测不出这一轮的差别。"
+      },
+      {
+        "assertion": "few-unit-scenarios",
+        "reason": "新版给 3 条、旧版给 2 条，都落在 1～3 条内，都过。旧版把往返场景并进了边界场景，也被判过，区分不出新旧口径。"
+      }
+    ],
+    "overall": "新旧都是 6/6，这个用例无法区分两个版本。差别只在场景数（新版 3 条、旧版 2 条）和新版主动把列表与导出是否带 remark 作为待确认问题抛出。"
+  }
+}

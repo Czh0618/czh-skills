@@ -1,0 +1,40 @@
+{
+  "expectations": [
+    {
+      "text": "smell-fat-controller",
+      "passed": true,
+      "evidence": "诊断 #1 Fat Controller / 业务逻辑泄露到 Web 层，严重度高，引用 'create 方法承担客户查询 / 库存与价格计算 / 订单落库等业务编排'"
+    },
+    {
+      "text": "layer-violation",
+      "passed": true,
+      "evidence": "诊断 #2 分层泄露 Layer Violation，严重度高，明确指出 'Controller 直接 @Autowired 注入 OrderMapper / CustomerMapper / ProductMapper，绕过 Service 层'"
+    },
+    {
+      "text": "extract-service",
+      "passed": true,
+      "evidence": "诊断 #1 推荐手法 'Extract Class → OrderService；Move Method 把业务搬到 Service'；诊断 #2 推荐 'Move Field（Mapper 注入下沉到 Service）'"
+    },
+    {
+      "text": "controller-advice",
+      "passed": true,
+      "evidence": "诊断 #3 引入 @Valid + Bean Validation 注解；诊断 #4 自定义业务异常 + @ControllerAdvice + @ExceptionHandler 集中处理"
+    },
+    {
+      "text": "extract-mapper",
+      "passed": true,
+      "evidence": "诊断 #5 Extract Class → OrderDtoMapper（手写或 MapStruct）；req → Order、Order + Customer → VO 两个映射方法"
+    },
+    {
+      "text": "http-contract-preserved",
+      "passed": true,
+      "evidence": "Step 0 上下文摘要'API 变更'项明确：必须保持 HTTP 契约不变 — 路径 POST /api/orders、请求体 OrderRequest、响应 OrderResponseVO JSON 结构、HTTP 状态码、错误响应体形态 {error:...}"
+    }
+  ],
+  "summary": {
+    "pass_rate": 1.0,
+    "passed": 6,
+    "failed": 0,
+    "total": 6
+  }
+}

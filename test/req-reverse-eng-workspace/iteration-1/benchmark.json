@@ -1,0 +1,142 @@
+{
+  "skill_name": "req-reverse-eng",
+  "iteration": 1,
+  "configurations": [
+    {
+      "name": "with_skill",
+      "label": "With Skill"
+    },
+    {
+      "name": "without_skill",
+      "label": "Without Skill (Baseline)"
+    }
+  ],
+  "evals": [
+    {
+      "name": "coupon-system",
+      "results": {
+        "with_skill": {
+          "pass_rate": 0.833,
+          "passed": 5,
+          "total": 6,
+          "tokens": 22891,
+          "duration_seconds": 111.1,
+          "assertions": [
+            {"text": "format-quiz", "passed": true},
+            {"text": "dimension-state", "passed": true},
+            {"text": "dimension-edge", "passed": true},
+            {"text": "dimension-permission", "passed": true},
+            {"text": "no-code", "passed": true},
+            {"text": "question-count", "passed": false}
+          ]
+        },
+        "without_skill": {
+          "pass_rate": 0.5,
+          "passed": 3,
+          "total": 6,
+          "tokens": 17969,
+          "duration_seconds": 82.9,
+          "assertions": [
+            {"text": "format-quiz", "passed": false},
+            {"text": "dimension-state", "passed": true},
+            {"text": "dimension-edge", "passed": true},
+            {"text": "dimension-permission", "passed": false},
+            {"text": "no-code", "passed": true},
+            {"text": "question-count", "passed": false}
+          ]
+        }
+      }
+    },
+    {
+      "name": "approval-flow",
+      "results": {
+        "with_skill": {
+          "pass_rate": 0.8,
+          "passed": 4,
+          "total": 5,
+          "tokens": 22903,
+          "duration_seconds": 98.1,
+          "assertions": [
+            {"text": "format-quiz", "passed": true},
+            {"text": "dimension-state", "passed": true},
+            {"text": "dimension-edge", "passed": true},
+            {"text": "no-code", "passed": true},
+            {"text": "question-count", "passed": false}
+          ]
+        },
+        "without_skill": {
+          "pass_rate": 0.6,
+          "passed": 3,
+          "total": 5,
+          "tokens": 17239,
+          "duration_seconds": 71.5,
+          "assertions": [
+            {"text": "format-quiz", "passed": false},
+            {"text": "dimension-state", "passed": true},
+            {"text": "dimension-edge", "passed": true},
+            {"text": "no-code", "passed": true},
+            {"text": "question-count", "passed": false}
+          ]
+        }
+      }
+    },
+    {
+      "name": "payment-refund",
+      "results": {
+        "with_skill": {
+          "pass_rate": 0.833,
+          "passed": 5,
+          "total": 6,
+          "tokens": 22987,
+          "duration_seconds": 113.1,
+          "assertions": [
+            {"text": "format-quiz", "passed": true},
+            {"text": "dimension-state", "passed": true},
+            {"text": "dimension-edge", "passed": true},
+            {"text": "dimension-data", "passed": true},
+            {"text": "no-code", "passed": true},
+            {"text": "question-count", "passed": false}
+          ]
+        },
+        "without_skill": {
+          "pass_rate": 0.667,
+          "passed": 4,
+          "total": 6,
+          "tokens": 16927,
+          "duration_seconds": 60.6,
+          "assertions": [
+            {"text": "format-quiz", "passed": false},
+            {"text": "dimension-state", "passed": true},
+            {"text": "dimension-edge", "passed": true},
+            {"text": "dimension-data", "passed": true},
+            {"text": "no-code", "passed": true},
+            {"text": "question-count", "passed": false}
+          ]
+        }
+      }
+    }
+  ],
+  "summary": {
+    "with_skill": {
+      "mean_pass_rate": 0.822,
+      "mean_tokens": 22927,
+      "mean_duration_seconds": 107.4
+    },
+    "without_skill": {
+      "mean_pass_rate": 0.589,
+      "mean_tokens": 17378,
+      "mean_duration_seconds": 71.7
+    },
+    "delta": {
+      "pass_rate": "+0.233 (with_skill wins)",
+      "tokens": "+5549 (with_skill uses more)",
+      "duration_seconds": "+35.7s (with_skill slower)"
+    }
+  },
+  "analyst_observations": [
+    "format-quiz 是最具区分度的断言：with_skill 3/3 通过，without_skill 0/3 通过。这是 skill 的核心价值。",
+    "question-count 两组都未通过（with_skill 32-33个，without_skill 40-60+个）。with_skill 的问题数更可控但仍超出 8-20 的设定区间。考虑调整 skill 中的数量指引为 15-35 个。",
+    "dimension-* 覆盖类断言两组表现接近，说明 Claude 本身的需求分析能力已不错，skill 的增量价值主要在输出格式（选择题/判断题）而非分析维度。",
+    "with_skill 平均多消耗 ~5500 tokens 和 ~36s，主要是因为需要先读取 SKILL.md。这是可接受的开销。"
+  ]
+}

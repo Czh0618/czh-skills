@@ -1,0 +1,40 @@
+{
+  "expectations": [
+    {
+      "text": "smell-anemic",
+      "passed": true,
+      "evidence": "诊断 #1 贫血模型 Anemic Domain Model，严重度高，引用 Order 仅 getter/setter + 业务规则全在 OrderService"
+    },
+    {
+      "text": "smell-type-code",
+      "passed": true,
+      "evidence": "诊断 #2 类型码 Integer status（0/1/2/3），严重度高，建议 Replace Type Code with Enum 'OrderStatus'"
+    },
+    {
+      "text": "smell-money-vo",
+      "passed": true,
+      "evidence": "诊断 #3 数据泥团 + 基本类型偏执，amount + currency，建议 Introduce Value Object Money（不可变 record + add/multiply）"
+    },
+    {
+      "text": "move-method-to-entity",
+      "passed": true,
+      "evidence": "诊断 #4 状态机散落 + #5 calculateTotal 应在实体上，明确建议 Move Method（pay/cancel/calculateTotal 从 Service 搬入 Order）"
+    },
+    {
+      "text": "ddd-tactical-reference",
+      "passed": true,
+      "evidence": "诊断报告与路线图反复引用 references/ddd-tactical.md 的 §Entity / §Value Object / §贫血→充血 阶段 1-3 / §过度设计警告"
+    },
+    {
+      "text": "complexity-warning",
+      "passed": true,
+      "evidence": "step1 中专门有'⚠️ 过度设计警告（DDD 化决策点）'表格，按 ddd-tactical.md §过度设计警告 判定清单评估，结论：当前只 0-1 项明确为'是'，建议阶段 4-6 暂缓；还明确建议先走 /req-reverse-eng 澄清"
+    }
+  ],
+  "summary": {
+    "pass_rate": 1.0,
+    "passed": 6,
+    "failed": 0,
+    "total": 6
+  }
+}

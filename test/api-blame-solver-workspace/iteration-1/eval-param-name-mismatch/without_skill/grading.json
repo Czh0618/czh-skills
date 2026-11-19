@@ -1,0 +1,8 @@
+{
+  "expectations": [
+    {"text": "has-blame", "passed": true, "evidence": "输出明确指出'前端 + 后端双方都有问题'，并指出主要责任在前端因为传递了错误的参数名"},
+    {"text": "root-cause", "passed": true, "evidence": "用大白话解释了根本原因：参数名大小写不一致，userid vs userId"},
+    {"text": "fix-suggestion", "passed": true, "evidence": "给出了前端修改方案：将 userid 改为 userId"},
+    {"text": "evidence-cited", "passed": true, "evidence": "引用了错误信息原文：Required request parameter 'userId' for method parameter type Long is not present"}
+  ]
+}

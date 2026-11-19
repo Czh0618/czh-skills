@@ -1,0 +1,8 @@
+{
+  "expectations": [
+    {"text": "has-blame", "passed": true, "evidence": "输出明确判定'前端'，并在'责任方：前端'中明确指出前端负责修复"},
+    {"text": "root-cause", "passed": true, "evidence": "用大白话解释了根本原因：前端 Content-Type 设置错误，后端只接受 application/json"},
+    {"text": "fix-suggestion", "passed": true, "evidence": "给出了具体的前端修复方案，将 Content-Type 从 text/plain 改为 application/json，并附修改前后代码对比"},
+    {"text": "status-code-explained", "passed": true, "evidence": "在总结表中说明了'415 Unsupported Media Type（服务端正确行为）'"}
+  ]
+}

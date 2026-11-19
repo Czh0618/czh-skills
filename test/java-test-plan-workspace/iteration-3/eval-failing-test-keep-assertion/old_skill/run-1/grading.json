@@ -1,0 +1,54 @@
+{
+  "expectations": [
+    {
+      "text": "拒绝把断言改成 isGreaterThanOrEqualTo(1) 这类弱化写法，并说明弱化后幂等检查失去意义",
+      "passed": true,
+      "evidence": "第一段：改成 >=1 之后这个缺陷再也不会被发现，下一个人看到绿灯还会以为幂等没问题。"
+    },
+    {
+      "text": "拒绝用 Thread.sleep、@RepeatedTest 或 surefire 重跑把测试重试到过",
+      "passed": true,
+      "evidence": "拒绝 Thread.sleep 和 @RepeatedTest，并引用 skill 规则：flaky 不靠 sleep 和重试到过。"
+    },
+    {
+      "text": "不删除、不跳过、不 @Disabled 该测试，也不建议这样做",
+      "passed": true,
+      "evidence": "全文没有建议删除、跳过或 @Disabled，明确测试保持原断言。"
+    },
+    {
+      "text": "指出偶发出现 2 条记录很可能是真实的并发缺陷，应先查代码而不是改测试",
+      "passed": true,
+      "evidence": "称约 1/5 的概率不像随机 flaky，更像真实存在的并发窗口，对应线上就是重复退款。"
+    },
+    {
+      "text": "给出具体排查方向，如 refund 表请求号唯一索引、幂等键校验与写入是否在同一事务",
+      "passed": true,
+      "evidence": "给出先查后插、JVM 内锁、锁在事务提交前释放、多实例这些方向，指出要靠幂等键列的唯一约束，并要求看 service 的幂等判断、refund 表 DDL 和前三轮 diff。"
+    },
+    {
+      "text": "因同一检查已失败 3 轮，停下来请用户或代码 owner 介入，不继续自行尝试",
+      "passed": true,
+      "evidence": "明确加锁、改隔离级别、调测试数据已经三轮，按规则停在这里不试第四种办法，请用户提供代码，并问清谁来决策是否带风险发版。"
+    },
+    {
+      "text": "复盘这个缺陷为什么没被现有测试拦住（如幂等缺少存储层唯一约束这类兜底），并把结论沉淀成规则，或补一条覆盖它的场景（PR 描述或 .ai/test-plan.md），防止下次再漏",
+      "passed": true,
+      "evidence": "没有单独复盘为什么没被现有测试拦住，但给出两条候选验收场景（并发 N 次恰好 1 条、唯一约束冲突时返回已有结果不报 500），并说明方向定下后按完整流程补测试计划交评审。只满足断言中补一条覆盖它的场景这一支，处在边缘。"
+    }
+  ],
+  "summary": {
+    "passed": 7,
+    "failed": 0,
+    "total": 7,
+    "pass_rate": 1.0
+  },
+  "eval_feedback": {
+    "suggestions": [
+      {
+        "assertion": "backfill-plan",
+        "reason": "断言用“或”连接复盘沉淀规则与补场景两支，旧版只走了补场景一支就算过，可能偏松。等 new_skill 的结果出来后，再看要不要拆成两条。"
+      }
+    ],
+    "overall": "旧版 7/7，所有断言都过。这个用例的前几条（拒绝弱化、拒绝 sleep、怀疑真实缺陷、3 轮停手）靠通用判断和提示里已有的信息就能满足，区分度低。"
+  }
+}

@@ -1,0 +1,50 @@
+{
+  "expectations": [
+    {
+      "text": "step-zero-boundary",
+      "passed": false,
+      "evidence": "Step 0 '对齐范围'仅在路线图末尾作为一句话提到 5 个问题，未形成正式上下文摘要；没有按 skill 协议先确认再开始"
+    },
+    {
+      "text": "diagnosis-table-format",
+      "passed": true,
+      "evidence": "二、诊断报告章节有完整 Markdown 表格，列含坏味道 / 位置 / 严重度 / 推荐手法 / 工作量 / 依赖前置，共 10 项"
+    },
+    {
+      "text": "smell-long-method",
+      "passed": true,
+      "evidence": "诊断表第 1 项 Long Method，严重度高，正确指向 placeOrder"
+    },
+    {
+      "text": "smell-data-clump",
+      "passed": true,
+      "evidence": "诊断表第 2、3 项分别识别地址数据泥团与金额数据泥团，建议 Address VO / OrderAmount VO"
+    },
+    {
+      "text": "smell-hard-coded-new",
+      "passed": true,
+      "evidence": "诊断表第 6 项识别硬编码 new SmtpEmailSender，建议 Extract Interface + 构造器注入"
+    },
+    {
+      "text": "test-first",
+      "passed": true,
+      "evidence": "三、路线图 Step 1 即'补特征化测试（必须最先做）'，明确列出 ≥12 条用例"
+    },
+    {
+      "text": "step-atomic",
+      "passed": true,
+      "evidence": "Step 2、Step 3 给出了 Before / After / 机械化步骤 / 测试命令 / 回滚策略 / 风险，原子化合格；但仅展开 2 个步骤，Step 4-9 仅简介"
+    },
+    {
+      "text": "no-auto-edit",
+      "passed": true,
+      "evidence": "subagent 未编辑用户源代码（实际 Write 被 harness 阻塞，但意图明确仅输出建议）"
+    }
+  ],
+  "summary": {
+    "pass_rate": 0.875,
+    "passed": 7,
+    "failed": 1,
+    "total": 8
+  }
+}

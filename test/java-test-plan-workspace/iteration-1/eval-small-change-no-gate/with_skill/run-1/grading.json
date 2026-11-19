@@ -1,0 +1,30 @@
+{
+  "expectations": [
+    {
+      "text": "明确判定为“单字段增减”，属于不需要完整流程的小改动",
+      "passed": true,
+      "evidence": "回复引用适用范围：单字段增减走轻量路径，不需要完整测试计划，直接开发。"
+    },
+    {
+      "text": "不创建 .ai/test-plan.md，也不要求评审门禁或等待用户确认计划",
+      "passed": true,
+      "evidence": "outputs 下只有 response.md，没有 .ai/test-plan.md；回复明确说不走评审门禁。"
+    },
+    {
+      "text": "只给出 1～2 条 UNIT 场景（如超长 remark 被拒、remark 为空时的返回），并说明放进 PR 描述",
+      "passed": true,
+      "evidence": "给出 UNIT-01 remark 往返、UNIT-02 remark 可空两条，写明放进 PR 描述。超长校验是待用户确认后才可能追加的第 3 条，当前未计入。"
+    },
+    {
+      "text": "不引入 E2E / 属性 / 差分场景，也不提出新增依赖",
+      "passed": true,
+      "evidence": "没有 E2E、属性、差分场景，并写明不需要新增测试依赖。"
+    }
+  ],
+  "summary": {
+    "passed": 4,
+    "failed": 0,
+    "total": 4,
+    "pass_rate": 1.0
+  }
+}

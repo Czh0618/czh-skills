@@ -1,0 +1,48 @@
+{
+  "expectations": [
+    {
+      "text": "明确判定为“单字段增减”，属于不需要完整流程的小改动",
+      "passed": true,
+      "evidence": "开头“不用先出测试计划”，称单字段新增属于小改动，不建 .ai/test-plan.md，不走评审门禁。"
+    },
+    {
+      "text": "不创建 .ai/test-plan.md，也不要求评审门禁或等待用户确认计划",
+      "passed": true,
+      "evidence": "明确不建计划文件，不走评审门禁；产出目录只有 response.md。"
+    },
+    {
+      "text": "只给出 1～2 条 UNIT 场景（如超长 remark 被拒、remark 为空时的返回），并说明放进 PR 描述",
+      "passed": true,
+      "evidence": "UNIT-01 创建带备注后查详情、UNIT-02 不传 remark 及历史订单为 NULL 两条，放 PR 描述；超长边界等用户回复后再补第三条，当前未计入。"
+    },
+    {
+      "text": "不引入 E2E / 属性 / 差分场景，也不提出新增依赖",
+      "passed": true,
+      "evidence": "没有 E2E、属性、差分场景；提醒 UNIT-01 不要 mock Mapper，用真实库（Testcontainers 或项目已有测试库）。这是二选一的建议，没有列入需新增依赖，判过，但处在边缘。"
+    },
+    {
+      "text": "只回答是否需要计划并给出场景，不写任何实现代码（迁移脚本、实体、Mapper、Service、测试类均不创建）",
+      "passed": true,
+      "evidence": "产出目录只有 response.md，没有实现或测试文件；回复写明本 skill 只产出场景，实现交给 dev 或用户另行发起。"
+    }
+  ],
+  "summary": {
+    "passed": 5,
+    "failed": 0,
+    "total": 5,
+    "pass_rate": 1.0
+  },
+  "eval_feedback": {
+    "suggestions": [
+      {
+        "assertion": "建议新增：动手前列出连带改动点",
+        "reason": "新 skill 的主要改动是小改动先列连带改动点。新版回复列了列表和导出是否共用 VO、DDL、Mapper、DTO 转换，旧版没有，但现有 5 条断言没有一条检查这一点，所以两边都 5/5，看不出改动效果。"
+      },
+      {
+        "assertion": "no-overkill",
+        "reason": "新版回复把 Testcontainers 作为真实库的备选提到了，按字面可能被判为提出依赖。建议改成“不把新依赖列入需新增依赖清单”。"
+      }
+    ],
+    "overall": "新旧都 5/5，这个用例无法区分两个版本。"
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "eval_id": 2,
+  "run_id": "eval-approval-flow-without_skill",
+  "configuration": "without_skill",
+  "expectations": [
+    {"text": "format-quiz: 输出包含选择题/判断题格式", "passed": false, "evidence": "全部问题为 checklist 格式（- [ ]），无选择题/判断题"},
+    {"text": "dimension-state: 覆盖审批流状态流转", "passed": true, "evidence": "第4节详细列出状态机和流转规则"},
+    {"text": "dimension-edge: 边界条件", "passed": true, "evidence": "第7节并发冲突，第11节边界异常场景汇总表"},
+    {"text": "no-code: 不含代码片段", "passed": true, "evidence": "全文无代码"},
+    {"text": "question-count: 8-20个问题", "passed": false, "evidence": "约40+个问题，超出上限"}
+  ]
+}

@@ -1,0 +1,40 @@
+{
+  "expectations": [
+    {
+      "text": "smell-god-class",
+      "passed": true,
+      "evidence": "诊断表第 1 项 God Class，严重度高，引用 700+ 行 / 11 依赖 / 4 子域作为证据"
+    },
+    {
+      "text": "smell-divergent-change",
+      "passed": true,
+      "evidence": "诊断表第 2 项 Divergent Change，严重度高，明确说明任一子域变更都会改这个类"
+    },
+    {
+      "text": "split-by-subdomain",
+      "passed": true,
+      "evidence": "二、拆分目标架构按 User / Permission / Audit / Notification 4 个 Service + 可选 Facade 拆分，绘出依赖 DAG"
+    },
+    {
+      "text": "spring-warnings",
+      "passed": true,
+      "evidence": "四、Spring 特定风险章节非常详细：1. @Transactional 边界变化（self-invocation）、2. AOP 切面影响、3. 注入点变化、4. 循环依赖预防、5. 测试覆盖、6. MyBatis 相关"
+    },
+    {
+      "text": "split-order",
+      "passed": true,
+      "evidence": "三、拆分路线图按 Step 1 Audit（叶子）→ Step 2 Notification（叶子）→ Step 3 Permission（中间层）→ Step 4 UserService 瘦身，依赖排序清晰"
+    },
+    {
+      "text": "circular-dep-check",
+      "passed": true,
+      "evidence": "四.4 循环依赖预防章节具体讨论 PermissionService ↔ UserService 和 NotificationService ↔ UserService 两种循环场景，并给出方案 A（事件）和方案 B（只读接口）"
+    }
+  ],
+  "summary": {
+    "pass_rate": 1.0,
+    "passed": 6,
+    "failed": 0,
+    "total": 6
+  }
+}

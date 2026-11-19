@@ -1,0 +1,13 @@
+{
+  "eval_id": 3,
+  "eval_name": "payment-refund",
+  "prompt": "用户在支付完成后可以申请退款，需要支持全额退款和部分退款，退款需要经过客服审核。",
+  "assertions": [
+    {"id": "format-quiz", "text": "输出包含选择题（A/B/C选项）或判断题（是/否）格式的问题"},
+    {"id": "dimension-state", "text": "覆盖了退款状态流转（申请、审核中、退款中、已退款、退款失败等）"},
+    {"id": "dimension-edge", "text": "列举了边界条件（如重复退款、部分退款后再退、退款超时等）"},
+    {"id": "dimension-data", "text": "涉及数据一致性问题（如退款与订单状态同步、库存回滚等）"},
+    {"id": "no-code", "text": "不包含任何代码片段，纯业务问题清单"},
+    {"id": "question-count", "text": "问题数量在8-20个之间"}
+  ]
+}

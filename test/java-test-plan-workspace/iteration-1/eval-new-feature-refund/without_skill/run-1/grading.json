@@ -1,0 +1,53 @@
+{
+  "expectations": [
+    {
+      "text": "在目标项目根目录生成 .ai/test-plan.md，表格含编号、需求点、场景、类型、输入、预期结果、工具、测试文件/方法、状态各列",
+      "passed": false,
+      "evidence": "产出是 test-cases.md，不在 .ai/ 下；表头只有 ID、层、场景、预期、级、Q，缺类型、输入、工具、测试文件/方法、状态列。"
+    },
+    {
+      "text": "端到端场景走 API 级（Testcontainers + HTTP 客户端），不默认使用 Playwright",
+      "passed": false,
+      "evidence": "没有端到端层。分为 L1 Mockito、L2 MockMvc、L3 真实库集成；真实库倾向用现有 test MySQL 的独立 schema，没选 Testcontainers，也没有 HTTP 客户端走完整接口链路。没有用 Playwright。"
+    },
+    {
+      "text": "至少一条 PROP 场景覆盖“累计退款不超过实付”或“重复提交幂等”",
+      "passed": false,
+      "evidence": "没有 PROP 类型场景，并明确说金额边界用 @ParameterizedTest，不需要 jqwik。累计不超实付和重复提交幂等由 B6、B7、C1、C2 用具体例子覆盖，是示例测试，不是属性测试。"
+    },
+    {
+      "text": "指出退款后订单状态值未定义并向用户提问，不自行假设",
+      "passed": true,
+      "evidence": "待确认第 1 条问退款后订单状态用什么值，E3 标注依赖 Q1，没有自行假设。"
+    },
+    {
+      "text": "发现 pom.xml 缺 jqwik / Testcontainers / RestAssured，列入“需新增依赖”等待批准，不直接修改 pom.xml",
+      "passed": false,
+      "evidence": "没有“需新增依赖”清单，也没改 pom。只说 spring-boot-starter-test 缺则建议加，Testcontainers 作为选项 (b) 让用户选，并主动认为 jqwik、RestAssured 不需要。接近但没有按列出待批准的方式处理，判不过。"
+    },
+    {
+      "text": "写完计划后停下请用户确认；在“越快越好”的压力下仍不写任何实现代码",
+      "passed": true,
+      "evidence": "停在 6 个待确认问题，回复写明没写任何实现和测试代码。注意这条受任务里“先别写实现”和我给子 agent 的“遇到待确认点就停下”影响，基线也会过。"
+    }
+  ],
+  "summary": {
+    "passed": 2,
+    "failed": 4,
+    "total": 6,
+    "pass_rate": 0.33
+  },
+  "eval_feedback": {
+    "suggestions": [
+      {
+        "assertion": "stop-for-review / ambiguity-flagged",
+        "reason": "用例提示写了先别写实现，我给子 agent 的补充说明也要求遇到待确认点就停下，基线因此也会过，测不出 skill 的增量。"
+      },
+      {
+        "assertion": "property-invariants",
+        "reason": "按 PROP 类型判，基线用示例用例覆盖了同样的不变量也不过。若关心的是不变量是否被覆盖，应改成检查场景内容，不绑定类型。"
+      }
+    ],
+    "overall": "基线 2/6。失分集中在 skill 约定的产出路径、模板列、依赖处理上，这些是约定，不是通用工程判断。with_skill 还没跑完，对比要等它。"
+  }
+}

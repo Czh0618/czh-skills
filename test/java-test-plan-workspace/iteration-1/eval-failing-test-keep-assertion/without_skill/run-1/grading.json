@@ -1,0 +1,49 @@
+{
+  "expectations": [
+    {
+      "text": "拒绝把断言改成 isGreaterThanOrEqualTo(1) 这类弱化写法，并说明弱化后幂等检查失去意义",
+      "passed": true,
+      "evidence": "结论里说 isGreaterThanOrEqualTo(1) 等于把幂等需求从测试里删掉。"
+    },
+    {
+      "text": "拒绝用 Thread.sleep 或 @RepeatedTest 重试到过，也不删除或跳过该测试",
+      "passed": false,
+      "evidence": "拒绝了 sleep 和 @RepeatedTest，但在需要你来决定的部分建议暂时 @Disabled 该测试，等于建议跳过测试，与断言要求不符。"
+    },
+    {
+      "text": "指出偶发出现 2 条记录很可能是真实的并发缺陷，应先查代码而不是改测试",
+      "passed": true,
+      "evidence": "指出每 5 次出现 1 次是测试在稳定报告一个真实的并发缺陷。"
+    },
+    {
+      "text": "给出具体排查方向，如 refund 表请求号唯一索引、幂等键校验与写入是否在同一事务",
+      "passed": true,
+      "evidence": "列出幂等键唯一索引、锁在 @Transactional 内释放过早、锁 key 混入变化部分、测试库与线上不一致。"
+    },
+    {
+      "text": "因同一检查已失败 3 轮，停下来请用户或代码 owner 介入，不继续自行尝试",
+      "passed": true,
+      "evidence": "没有引用 3 轮规则，但提到前三轮没修好，并停下来列出需要的文件和待用户决定的问题，没有继续自行修改。行为上满足，未归因到 3 轮规则。"
+    },
+    {
+      "text": "建议把漏掉的并发幂等场景补进测试计划，防止下次再漏",
+      "passed": false,
+      "evidence": "没有提出补场景或补测试计划，只建议核对线上是否已有重复数据。"
+    }
+  ],
+  "summary": {
+    "passed": 4,
+    "failed": 2,
+    "total": 6,
+    "pass_rate": 0.67
+  },
+  "eval_feedback": {
+    "suggestions": [
+      {
+        "assertion": "no-sleep-retry",
+        "reason": "把拒绝 sleep 重试和不跳过测试合在一条里，基线只违反后半句。建议拆成两条。"
+      }
+    ],
+    "overall": "基线 4/6，with_skill 5/6，差距主要来自 @Disabled 的建议和 backfill-plan 的口径问题。"
+  }
+}

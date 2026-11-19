@@ -1,0 +1,13 @@
+{
+  "eval_id": 1,
+  "eval_name": "coupon-system",
+  "prompt": "我们要做一个优惠券系统，支持满减券、折扣券、新人券。用户下单时可以选择使用优惠券，系统需要校验优惠券的使用条件。",
+  "assertions": [
+    {"id": "format-quiz", "text": "输出包含选择题（A/B/C选项）或判断题（是/否）格式的问题"},
+    {"id": "dimension-state", "text": "覆盖了优惠券的状态流转分析（如创建、激活、使用、过期、作废等）"},
+    {"id": "dimension-edge", "text": "列举了至少3个边界条件（如并发使用、叠加规则、金额精度等）"},
+    {"id": "dimension-permission", "text": "涉及角色与权限分析（如谁能创建券、谁能核销等）"},
+    {"id": "no-code", "text": "不包含任何代码片段，纯业务问题清单"},
+    {"id": "question-count", "text": "问题数量在8-20个之间，既全面又不过度"}
+  ]
+}

@@ -1,0 +1,57 @@
+{
+  "expectations": [
+    {
+      "text": "在目标项目根目录生成 .ai/test-plan.md，表格含编号、需求点、场景、类型、输入、预期结果、工具、测试文件/方法、状态各列",
+      "passed": true,
+      "evidence": "outputs/.ai/test-plan.md 存在；第 3 节场景表含编号、需求点、场景、类型、输入、预期结果、工具、测试文件/方法、状态 9 列，测试文件/方法列写开发时回填。"
+    },
+    {
+      "text": "端到端场景走 API 级（Testcontainers + HTTP 客户端），不默认使用 Playwright",
+      "passed": true,
+      "evidence": "E2E-01 到 E2E-07 用 RestAssured + Testcontainers 走 POST /api/orders/{id}/refunds 完整链路；第 4 节给了 TestRestTemplate 作为 RestAssured 的二选一替代；第 5 节明确不做 Playwright。"
+    },
+    {
+      "text": "场景清单覆盖“累计退款不超过实付”和“重复提交幂等”这两条不变量（属性测试或具体用例均可），不要求必须是 PROP 类型",
+      "passed": true,
+      "evidence": "PROP-01 覆盖累计退款永不超过实付，PROP-02 覆盖重复提交等于提交一次，两条不变量都在。"
+    },
+    {
+      "text": "指出退款后订单状态值未定义并向用户提问，不自行假设",
+      "passed": true,
+      "evidence": "第 2 节 Q1 问部分退款后和累计退满后订单状态用什么值，相关场景预期写待 Q1，没有自行假设。"
+    },
+    {
+      "text": "发现 pom.xml 缺 jqwik / Testcontainers / RestAssured，列入“需新增依赖”等待批准，不直接修改 pom.xml",
+      "passed": true,
+      "evidence": "第 4 节把 jqwik、Testcontainers、RestAssured 列为需新增依赖，写明批准前不引入，并如实说明没有 pom.xml 可核对；没有修改 pom。"
+    },
+    {
+      "text": "写完计划后停下请用户确认；在“越快越好”的压力下仍不写任何实现代码",
+      "passed": true,
+      "evidence": "计划头部和第 5 节评审门禁写明评审通过前不写任何实现代码，并停在评审这一步。注意用例提示已写先别写实现，且我给子 agent 的补充说明要求遇到待确认点就停下，新旧版本都会过。"
+    }
+  ],
+  "summary": {
+    "passed": 6,
+    "failed": 0,
+    "total": 6,
+    "pass_rate": 1.0
+  },
+  "eval_feedback": {
+    "suggestions": [
+      {
+        "assertion": "建议新增：场景数量按风险裁剪，同一路径不在多层重复断言",
+        "reason": "旧版 30 条场景，同一条幂等规则在 E2E-04、E2E-05、UNIT-11、PROP-02、INT-01 五处重复断言；新版 12 条。现有断言没有检查规模，旧版也拿 6/6。"
+      },
+      {
+        "assertion": "建议新增：推导规则单独标注，不阻塞评审",
+        "reason": "旧版没有区分需求明写和推导出来的规则，并发退款不超额、退款与发货并发、库存并发这些需求没写的场景都混在 R1 到 R5 下面；新版有 D1 到 D5 单独标注。"
+      },
+      {
+        "assertion": "stop-for-review / ambiguity-flagged",
+        "reason": "用例提示已写先别写实现，新旧都会过，区分不出版本。"
+      }
+    ],
+    "overall": "old_skill 6/6，new_skill 6/6，同分。差别在规模和结构：旧版 30 条场景、用 P0/P1/P2 排序而不是裁剪，新版 12 条；耗时 320.1 秒 / 74627 tokens，新版 178.8 秒 / 62663 tokens。这些改进现有断言都看不到，下一轮需要补断言。"
+  }
+}

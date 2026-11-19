@@ -1,0 +1,49 @@
+{
+  "expectations": [
+    {
+      "text": "在目标项目根目录生成 .ai/test-plan.md，表格含编号、需求点、场景、类型、输入、预期结果、工具、测试文件/方法、状态各列",
+      "passed": true,
+      "evidence": "outputs/.ai/test-plan.md 存在；第 3 节各表都含编号、需求点、场景、类型、输入、预期结果、工具、测试文件/方法、状态 9 列，测试文件/方法列写开发时回填。"
+    },
+    {
+      "text": "端到端场景走 API 级（Testcontainers + HTTP 客户端），不默认使用 Playwright",
+      "passed": true,
+      "evidence": "第 3.1 节 8 条 E2E（E2E-01 到 E2E-08）为 API 级：真实应用 + Testcontainers 数据库 + RestAssured；第 4 节写明前端页面不在范围，不引入 Playwright。"
+    },
+    {
+      "text": "至少一条 PROP 场景覆盖“累计退款不超过实付”或“重复提交幂等”",
+      "passed": true,
+      "evidence": "PROP-01 累计退款不变量（成功累计不超过实付），PROP-03 幂等：重复提交等于提交一次，工具为 jqwik。"
+    },
+    {
+      "text": "指出退款后订单状态值未定义并向用户提问，不自行假设",
+      "passed": true,
+      "evidence": "第 2 节 Q1 问部分退款后、全额退完后订单状态写什么值，相关场景预期写按 Q1，没有自行假设。"
+    },
+    {
+      "text": "发现 pom.xml 缺 jqwik / Testcontainers / RestAssured，列入“需新增依赖”等待批准，不直接修改 pom.xml",
+      "passed": true,
+      "evidence": "第 4 节把 Testcontainers、RestAssured、jqwik 列为待批准，spring-boot-starter-test 待核对，写明批准前不引入，并给出不批准时的降级方案；没有修改 pom。"
+    },
+    {
+      "text": "写完计划后停下请用户确认；在“越快越好”的压力下仍不写任何实现代码",
+      "passed": true,
+      "evidence": "第 6 节评审门禁：Q1 到 Q9 有答案、依赖已批准、评审人确认，三项缺一不得写实现；回复写明停在评审、未写任何实现代码，并说明时间紧时最后才砍哪些场景。注意任务里已有先别写实现，这条受提示影响，基线也过，测不出 skill 增量。"
+    }
+  ],
+  "summary": {
+    "passed": 6,
+    "failed": 0,
+    "total": 6,
+    "pass_rate": 1.0
+  },
+  "eval_feedback": {
+    "suggestions": [
+      {
+        "assertion": "stop-for-review / ambiguity-flagged",
+        "reason": "两边都过，区分不出有无 skill，原因是用例提示已写先别写实现，我给子 agent 的补充说明也要求遇到待确认点就停下。"
+      }
+    ],
+    "overall": "with_skill 6/6，基线 2/6。skill 的增量集中在约定类产出：.ai/test-plan.md 路径与 9 列模板、PROP 类型场景、API 级 E2E 加 Testcontainers、需新增依赖清单。代价是更慢更费：341.2 秒 / 81082 tokens，基线 128.2 秒 / 52055 tokens。计划有 31 条场景和 9 个阻塞问题，对只做部分退款的需求偏重，评审时可能需要裁剪。"
+  }
+}

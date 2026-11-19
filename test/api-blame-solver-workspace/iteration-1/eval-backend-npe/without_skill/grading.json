@@ -1,0 +1,8 @@
+{
+  "expectations": [
+    {"text": "has-blame", "passed": true, "evidence": "输出明确判定'主要责任在**后端**'"},
+    {"text": "root-cause", "passed": true, "evidence": "用大白话解释了根本原因：后端没有对可能为 null 的 nickname 参数做防御性处理导致 NPE"},
+    {"text": "fix-suggestion", "passed": true, "evidence": "给出了两种修复方案：加 @Valid 校验或加判空防御"},
+    {"text": "evidence-cited", "passed": true, "evidence": "引用了异常类型、出错类名 UserService.java:87 和调用链路"}
+  ]
+}

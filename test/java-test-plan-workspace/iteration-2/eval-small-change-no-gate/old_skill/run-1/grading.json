@@ -1,0 +1,35 @@
+{
+  "expectations": [
+    {
+      "text": "明确判定为“单字段增减”，属于不需要完整流程的小改动",
+      "passed": true,
+      "evidence": "回复开头“不用先出测试计划，可以直接开发”，引用适用范围：单字段增减走轻量路径，不升级到完整流程。"
+    },
+    {
+      "text": "不创建 .ai/test-plan.md，也不要求评审门禁或等待用户确认计划",
+      "passed": true,
+      "evidence": "明确不建 .ai/test-plan.md，不走评审门禁；产出目录只有 response.md。"
+    },
+    {
+      "text": "只给出 1～2 条 UNIT 场景（如超长 remark 被拒、remark 为空时的返回），并说明放进 PR 描述",
+      "passed": true,
+      "evidence": "给出 UNIT-01 带 remark 往返、UNIT-02 不传 remark 两条，写明放进 PR 描述；超长校验是待用户确认后才可能追加的 UNIT-03，当前未计入。"
+    },
+    {
+      "text": "不引入 E2E / 属性 / 差分场景，也不提出新增依赖",
+      "passed": true,
+      "evidence": "没有 E2E、属性、差分场景，也没有提出新增依赖。"
+    },
+    {
+      "text": "只回答是否需要计划并给出场景，不写任何实现代码（迁移脚本、实体、Mapper、Service、测试类均不创建）",
+      "passed": true,
+      "evidence": "产出目录只有 response.md 和 timing.json，没有迁移脚本、实体、Mapper、Service 或测试类。"
+    }
+  ],
+  "summary": {
+    "passed": 5,
+    "failed": 0,
+    "total": 5,
+    "pass_rate": 1.0
+  }
+}

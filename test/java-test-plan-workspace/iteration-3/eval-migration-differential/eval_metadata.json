@@ -1,0 +1,42 @@
+{
+  "eval_id": 2,
+  "eval_name": "migration-differential",
+  "prompt": "要把订单列表查询从老的 MyBatis XML 手写 SQL 迁到新的 JPA Specification 实现，对外接口不变。老实现跑了 3 年，线上有一批历史行为我们自己都说不清。我手上有一份生产流量日志，想直接拿来回放对比，看新实现有没有改行为。已确认的情况：日志含请求参数、响应体、用户身份、租户、时间戳，响应是新代码上线前老实现产生的，已经脱敏，不需要再清洗用户标识；有与日志时点对应的脱敏生产库快照；数据权限在网关；数据库是 MySQL，构建用 Maven，现有测试依赖是 JUnit 5 和 Mockito；新代码作为新版本发布，老版本保留一段时间过渡；回放要做性能对比；差异由开发负责人裁决，老行为疑似 bug 的先保持一致，后续另拉分支再修。帮我出测试计划。",
+  "assertions": [
+    {
+      "id": "diff-scenario-present",
+      "text": "计划含 DIFF 类型场景，同一批输入同时跑旧、新实现并对比输出",
+      "type": "coverage"
+    },
+    {
+      "id": "desensitize-prod-traffic",
+      "text": "明确生产流量必须先脱敏、只在测试环境回放，不直接使用原始生产日志",
+      "type": "constraint"
+    },
+    {
+      "id": "random-plus-sampled-input",
+      "text": "差分输入既包含流量样本，也包含日志之外的合成输入（随机生成或人工构造的边界数据均可）",
+      "type": "coverage"
+    },
+    {
+      "id": "approved-diff-list",
+      "text": "提出归一化无关差异，并维护“已批准的差异”清单",
+      "type": "process"
+    },
+    {
+      "id": "old-not-oracle",
+      "text": "说明旧系统不一定正确，差异只表示“变了”，需人判断修新代码还是接受变化",
+      "type": "process"
+    },
+    {
+      "id": "run-order",
+      "text": "给出明确的对跑顺序，且差分排在最后（集成层可并入单元/属性场景，不要求单列一步）",
+      "type": "process"
+    },
+    {
+      "id": "perf-compared-by-default",
+      "text": "计划默认含性能对比场景（耗时、SQL 条数、N+1），只在用户明确说不需要时才去掉，而不是把“要不要性能对比”当成开放问题悬着",
+      "type": "coverage"
+    }
+  ]
+}

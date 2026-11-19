@@ -1,0 +1,43 @@
+{
+  "expectations": [
+    {
+      "text": "明确判定为“单字段增减”，属于不需要完整流程的小改动",
+      "passed": true,
+      "evidence": "回复判定不需要先出测试计划，理由是只涉及 DDL、入参、映射、详情返回，风险小；但没有点出单字段增减这一类别，也未读 skill。按结论判过，这条两边都过。"
+    },
+    {
+      "text": "不创建 .ai/test-plan.md，也不要求评审门禁或等待用户确认计划",
+      "passed": true,
+      "evidence": "outputs 下没有 .ai/test-plan.md，回复直接进入开发，没有评审门禁。"
+    },
+    {
+      "text": "只给出 1～2 条 UNIT 场景（如超长 remark 被拒、remark 为空时的返回），并说明放进 PR 描述",
+      "passed": false,
+      "evidence": "列了 4 条验收条件，没标 UNIT 类型，也没说放进 PR 描述；还写了迁移脚本、实体、Mapper、Service 和 OrderServiceTest，超出了只回答是否需要计划的范围。"
+    },
+    {
+      "text": "不引入 E2E / 属性 / 差分场景，也不提出新增依赖",
+      "passed": true,
+      "evidence": "没有引入 E2E、属性、差分场景；只在没做里提到 Mapper 层集成测试需要 H2 或 Testcontainers，没有把它们作为依赖提出。"
+    }
+  ],
+  "summary": {
+    "passed": 3,
+    "failed": 1,
+    "total": 4,
+    "pass_rate": 0.75
+  },
+  "eval_feedback": {
+    "suggestions": [
+      {
+        "assertion": "scope-small-change",
+        "reason": "两边结论一致，区分不出有无 skill。"
+      },
+      {
+        "assertion": "建议新增：不写任何实现代码，只回答是否需要计划",
+        "reason": "基线直接写了 9 个实现与测试文件，with_skill 没有写，目前没有断言能捕捉这个差别。"
+      }
+    ],
+    "overall": "4 条里只有 one-or-two-unit 能区分有无 skill。"
+  }
+}

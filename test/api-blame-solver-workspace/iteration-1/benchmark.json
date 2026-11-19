@@ -1,0 +1,133 @@
+{
+  "skill_name": "api-blame-solver",
+  "iteration": 1,
+  "configurations": [
+    {
+      "name": "with_skill",
+      "label": "With Skill"
+    },
+    {
+      "name": "without_skill",
+      "label": "Without Skill (Baseline)"
+    }
+  ],
+  "evals": [
+    {
+      "name": "param-name-mismatch",
+      "results": {
+        "with_skill": {
+          "pass_rate": 1.0,
+          "passed": 4,
+          "total": 4,
+          "tokens": 8456,
+          "duration_seconds": 86.7,
+          "assertions": [
+            {"text": "has-blame", "passed": true},
+            {"text": "root-cause", "passed": true},
+            {"text": "fix-suggestion", "passed": true},
+            {"text": "evidence-cited", "passed": true}
+          ]
+        },
+        "without_skill": {
+          "pass_rate": 1.0,
+          "passed": 4,
+          "total": 4,
+          "tokens": 5250,
+          "duration_seconds": 46.9,
+          "assertions": [
+            {"text": "has-blame", "passed": true},
+            {"text": "root-cause", "passed": true},
+            {"text": "fix-suggestion", "passed": true},
+            {"text": "evidence-cited", "passed": true}
+          ]
+        }
+      }
+    },
+    {
+      "name": "backend-npe",
+      "results": {
+        "with_skill": {
+          "pass_rate": 1.0,
+          "passed": 4,
+          "total": 4,
+          "tokens": 11274,
+          "duration_seconds": 100.7,
+          "assertions": [
+            {"text": "has-blame", "passed": true},
+            {"text": "root-cause", "passed": true},
+            {"text": "fix-suggestion", "passed": true},
+            {"text": "evidence-cited", "passed": true}
+          ]
+        },
+        "without_skill": {
+          "pass_rate": 1.0,
+          "passed": 4,
+          "total": 4,
+          "tokens": 5398,
+          "duration_seconds": 82.9,
+          "assertions": [
+            {"text": "has-blame", "passed": true},
+            {"text": "root-cause", "passed": true},
+            {"text": "fix-suggestion", "passed": true},
+            {"text": "evidence-cited", "passed": true}
+          ]
+        }
+      }
+    },
+    {
+      "name": "content-type-mismatch",
+      "results": {
+        "with_skill": {
+          "pass_rate": 1.0,
+          "passed": 4,
+          "total": 4,
+          "tokens": 7707,
+          "duration_seconds": 87.1,
+          "assertions": [
+            {"text": "has-blame", "passed": true},
+            {"text": "root-cause", "passed": true},
+            {"text": "fix-suggestion", "passed": true},
+            {"text": "status-code-explained", "passed": true}
+          ]
+        },
+        "without_skill": {
+          "pass_rate": 1.0,
+          "passed": 4,
+          "total": 4,
+          "tokens": 5158,
+          "duration_seconds": 83.0,
+          "assertions": [
+            {"text": "has-blame", "passed": true},
+            {"text": "root-cause", "passed": true},
+            {"text": "fix-suggestion", "passed": true},
+            {"text": "status-code-explained", "passed": true}
+          ]
+        }
+      }
+    }
+  ],
+  "summary": {
+    "with_skill": {
+      "mean_pass_rate": 1.0,
+      "mean_tokens": 9146,
+      "mean_duration_seconds": 91.5
+    },
+    "without_skill": {
+      "mean_pass_rate": 1.0,
+      "mean_tokens": 5269,
+      "mean_duration_seconds": 70.9
+    },
+    "delta": {
+      "pass_rate": "0.0 (tie)",
+      "tokens": "+3877 (with_skill uses more)",
+      "duration_seconds": "+20.6s (with_skill slower)"
+    }
+  },
+  "analyst_observations": [
+    "所有测试用例 with_skill 和 without_skill 都 100% 通过。断言太宽松——Claude 本身就有较强的排错能力，skill 的增量价值不明显。",
+    "with_skill 平均多消耗 ~3900 tokens 和 ~21s，主要是读取 SKILL.md 的开销。",
+    "param-name-mismatch 测试中，with_skill 版本发现了更深层问题（@RequestParam 与 JSON body 不匹配），分析深度优于 baseline。但 baseline 也正确指出了参数名拼写错误。",
+    "建议：需要更难的测试用例，比如多个参数混合错误、模糊的异常信息、或者需要结合接口文档才能判断的场景，才能区分 skill 和 baseline 的差距。",
+    "当前断言只检查'有没有说清楚'，不检查'格式规范性'。可以增加断言如：是否按四段式格式输出（责任判定→根本原因→修复方案→补充说明）、是否使用了指定格式等。"
+  ]
+}

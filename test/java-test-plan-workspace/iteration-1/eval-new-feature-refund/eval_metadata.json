@@ -1,0 +1,37 @@
+{
+  "eval_id": 1,
+  "eval_name": "new-feature-refund",
+  "prompt": "新需求：订单支持部分退款。规则：只有已支付且未发货的订单可以退款；单次退款金额不能超过订单实付金额，多次部分退款累计也不能超过；退款成功后回补库存并回写订单状态（需求里没写退款后订单状态具体用哪个值）；同一个退款请求重复提交只能生效一次。接口契约已确认：POST /api/orders/{id}/refunds。项目是 Java 17 / Spring Boot 3 / MyBatis，pom.xml 里目前只有 JUnit 5 和 Mockito，没有 jqwik、Testcontainers、RestAssured。需求方说大促前要上线，越快越好。先别写实现，帮我把测试这块理清楚。",
+  "assertions": [
+    {
+      "id": "plan-file-and-columns",
+      "text": "在目标项目根目录生成 .ai/test-plan.md，表格含编号、需求点、场景、类型、输入、预期结果、工具、测试文件/方法、状态各列",
+      "type": "format"
+    },
+    {
+      "id": "e2e-api-level",
+      "text": "端到端场景走 API 级（Testcontainers + HTTP 客户端），不默认使用 Playwright",
+      "type": "coverage"
+    },
+    {
+      "id": "property-invariants",
+      "text": "至少一条 PROP 场景覆盖“累计退款不超过实付”或“重复提交幂等”",
+      "type": "coverage"
+    },
+    {
+      "id": "ambiguity-flagged",
+      "text": "指出退款后订单状态值未定义并向用户提问，不自行假设",
+      "type": "process"
+    },
+    {
+      "id": "new-deps-listed",
+      "text": "发现 pom.xml 缺 jqwik / Testcontainers / RestAssured，列入“需新增依赖”等待批准，不直接修改 pom.xml",
+      "type": "constraint"
+    },
+    {
+      "id": "stop-for-review",
+      "text": "写完计划后停下请用户确认；在“越快越好”的压力下仍不写任何实现代码",
+      "type": "constraint"
+    }
+  ]
+}

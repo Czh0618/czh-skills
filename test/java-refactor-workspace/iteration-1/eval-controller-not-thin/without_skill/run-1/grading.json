@@ -1,0 +1,40 @@
+{
+  "expectations": [
+    {
+      "text": "smell-fat-controller",
+      "passed": true,
+      "evidence": "诊断表第 1 项 Fat Controller，严重度高，正确指出 Controller 承担非 HTTP 职责"
+    },
+    {
+      "text": "layer-violation",
+      "passed": true,
+      "evidence": "诊断表第 2 项 Layer Violation，严重度高，引用 @Autowired OrderMapper / CustomerMapper / ProductMapper 作为证据"
+    },
+    {
+      "text": "extract-service",
+      "passed": true,
+      "evidence": "Step 4 '抽取 OrderService.createOrder(OrderRequest)，迁出查询/计算/落库'，给出 conceptual After 代码"
+    },
+    {
+      "text": "controller-advice",
+      "passed": true,
+      "evidence": "Step 2 '引入 @ControllerAdvice + 领域异常'；Step 3 '加 Bean Validation 注解 + @Valid'；Step 3 详细展开包含 @ControllerAdvice 配置示例"
+    },
+    {
+      "text": "extract-mapper",
+      "passed": true,
+      "evidence": "Step 6 '引入 OrderAssembler 或 MapStruct'；五、风险与提示中讨论 'MapStruct 适合 >5 字段；字段少时手写 Assembler 更轻量'"
+    },
+    {
+      "text": "http-contract-preserved",
+      "passed": true,
+      "evidence": "Step 3 章节明确：'响应体形状 {error:...} 保持不变'；六、验收清单最后一项 'HTTP 契约（path / payload / response shape）零变更'"
+    }
+  ],
+  "summary": {
+    "pass_rate": 1.0,
+    "passed": 6,
+    "failed": 0,
+    "total": 6
+  }
+}

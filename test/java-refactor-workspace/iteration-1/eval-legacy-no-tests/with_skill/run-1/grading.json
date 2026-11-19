@@ -1,0 +1,40 @@
+{
+  "expectations": [
+    {
+      "text": "warn-no-tests",
+      "passed": true,
+      "evidence": "step2-roadmap.md 开头'严正警示'明确警示：不要直接在 calculate(...) 方法里加 if 处理地区折扣，理由 1 即'无测试'"
+    },
+    {
+      "text": "characterization-test",
+      "passed": true,
+      "evidence": "路线图 Step 2 '特征化测试（Characterization Test）— 覆盖现有 5 条分支路径'，目标是固化动之前的行为作为安全网"
+    },
+    {
+      "text": "dependency-breaking",
+      "passed": true,
+      "evidence": "路线图 Step 1 '打破最小依赖：Extract Interface + 构造器注入（DbConnection / ConfigLoader / Logger）抽 3 个接缝接口'"
+    },
+    {
+      "text": "sprout-method",
+      "passed": true,
+      "evidence": "路线图 Step 3 '**Sprout Method**：新增 applyRegionDiscount(BigDecimal current, String region) 独立方法，独立 TDD 编写'"
+    },
+    {
+      "text": "no-direct-rewrite",
+      "passed": true,
+      "evidence": "严正警示明确反对直接 if 堆叠；'不推荐近期做'章节明确警示'整体重写会丢失隐式的业务规则'"
+    },
+    {
+      "text": "step-sequence",
+      "passed": true,
+      "evidence": "Feathers 推荐顺序明确：打破依赖 → 加测试 → Sprout Method → 单点接入 → Enum/Constant/Extract Method 滞后；步骤 5-7 留待后续不阻塞当前任务"
+    }
+  ],
+  "summary": {
+    "pass_rate": 1.0,
+    "passed": 6,
+    "failed": 0,
+    "total": 6
+  }
+}

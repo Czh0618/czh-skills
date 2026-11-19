@@ -1,0 +1,67 @@
+{
+  "expectations": [
+    {
+      "text": "在目标项目根目录生成 .ai/test-plan.md，表格含编号、需求点、场景、类型、输入、预期结果、工具、测试文件/方法、状态各列",
+      "passed": true,
+      "evidence": "outputs/.ai/test-plan.md 存在；第 3 节场景表含编号、需求点、场景、类型、输入、预期结果、工具、测试文件/方法、状态 9 列，测试文件/方法列写开发时回填。"
+    },
+    {
+      "text": "端到端场景走 API 级（Testcontainers + HTTP 客户端），不默认使用 Playwright",
+      "passed": true,
+      "evidence": "E2E-01 到 E2E-04 用 RestAssured + Testcontainers（MySQL，Flyway 建表）走真实 HTTP 链路，渠道用测试配置里的 Fake 替换；第 4 节说明纯后端走 API 级，MockMvc 只是评审可选的替代，没有使用 Playwright。"
+    },
+    {
+      "text": "场景清单覆盖“累计退款不超过实付”和“重复提交幂等”这两条不变量（属性测试或具体用例均可），不要求必须是 PROP 类型",
+      "passed": true,
+      "evidence": "PROP-01 覆盖成功退款累计不超过实付，PROP-03 覆盖同订单同金额重复提交只生效一次，PROP-04 覆盖回调重复送达，要求的两条不变量都在。"
+    },
+    {
+      "text": "沿用用户已给出的业务口径（退款后状态、幂等判定、库存回补、渠道异步失败），不重复提问；对用户没回答的点（如具体错误码、状态枚举的字段名）先说明要去代码里查，查不到再标待确认，不自行假设",
+      "passed": true,
+      "evidence": "第 2 节 Q1 要求先查代码再问，写明已查、代码不在手边、查不到；已确认的口径（退满已退款、部分不补库存、判重按订单加金额、渠道异步失败记为退款失败）在第 1 节沿用，没有重复提问。Q2 指出判重口径与部分退款可继续退之间的冲突，是新问题，不是重复。没有自行假设状态值。"
+    },
+    {
+      "text": "发现 pom.xml 缺 jqwik / Testcontainers / RestAssured，列入“需新增依赖”等待批准，不直接修改 pom.xml",
+      "passed": true,
+      "evidence": "第 4 节把 jqwik、Testcontainers、RestAssured 列为需新增依赖，写明只进 test scope、批准前不引入、版本批准后再查；已有的 spring-boot-starter-test 和 Flyway 不重复加；没有修改 pom。"
+    },
+    {
+      "text": "写完计划后停下请用户确认；在“越快越好”的压力下仍不写任何实现代码",
+      "passed": true,
+      "evidence": "计划头部和第 6 节写明评审通过前不写任何实现代码，停在评审，请用户回答 Q1 到 Q5 并批准依赖。注意用例提示已写先别写实现，且我给子 agent 的补充说明要求遇到待确认点就停下，新旧版本都会过，测不出增量。"
+    },
+    {
+      "text": "需求没写、由 agent 推导出的规则（如并发退款不超额）单独标成“推导规则”，不阻塞评审，由评审人决定是否纳入",
+      "passed": true,
+      "evidence": "第 1.4 节 D1 到 D7 单列为推导规则，写明需求没写、不阻塞评审、由评审人决定是否纳入，场景表里也标了推导。"
+    },
+    {
+      "text": "计划按风险裁剪：场景总数不超过 20 条，且同一条规则不在 E2E、集成、单元三层重复断言",
+      "passed": false,
+      "evidence": "场景共 19 条（E2E 4、PROP 4、INT 4、UNIT 7），在 20 条以内。但重复判定规则 R6 在 E2E-04、PROP-03、INT-02、UNIT-03 四处出现，覆盖 E2E、集成、单元三层。计划把串行与并发形态分开，意图是不重叠，但按断言字面判不过，处在边缘。"
+    }
+  ],
+  "summary": {
+    "passed": 7,
+    "failed": 1,
+    "total": 8,
+    "pass_rate": 0.88
+  },
+  "eval_feedback": {
+    "suggestions": [
+      {
+        "assertion": "plan-size-trimmed",
+        "reason": "new_skill 23 条、old_skill 19 条，上限 20 是我定的数字，两版都在阈值附近。本轮提示补了更多业务口径，明写规则数变多，场景数随之变多。三层重复两版都有（新版 R3 在 E2E-02、PROP-01、INT-02、UNIT-05、UNIT-06 多层出现）。这条断言既写死数字又要求三层不重复，过严且难判定，建议改成按明写规则数的相对量，并把三层不重复拆成独立一条。"
+      },
+      {
+        "assertion": "derived-rules-marked",
+        "reason": "旧快照 skill-snapshot-v2 拍摄时已经包含推导规则标注和按风险裁剪的要求，所以新旧都过，这一轮测不出差别。"
+      },
+      {
+        "assertion": "stop-for-review",
+        "reason": "用例提示已写先别写实现，新旧都会过。"
+      }
+    ],
+    "overall": "old_skill 7/8，new_skill 7/8，同分，失分都在 plan-size-trimmed。耗时 562.4 秒 / 84812 tokens，new_skill 为 405.6 秒 / 75139 tokens，新版更省。新旧计划结构接近，这一轮的改动（差分口径、不重复提问）在这个用例里没有用武之地。"
+  }
+}

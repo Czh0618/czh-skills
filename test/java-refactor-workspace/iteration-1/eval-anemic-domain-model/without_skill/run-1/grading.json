@@ -1,0 +1,40 @@
+{
+  "expectations": [
+    {
+      "text": "smell-anemic",
+      "passed": true,
+      "evidence": "诊断表第 1 项贫血模型 Anemic Domain Model，严重度高"
+    },
+    {
+      "text": "smell-type-code",
+      "passed": true,
+      "evidence": "诊断表第 2 项类型码反模式 Order.status: Integer，严重度高，建议 enum"
+    },
+    {
+      "text": "smell-money-vo",
+      "passed": true,
+      "evidence": "诊断表第 3 项数据泥团 amount + currency，建议 Money 值对象；Step 3 详细展开了 record Money 实现"
+    },
+    {
+      "text": "move-method-to-entity",
+      "passed": true,
+      "evidence": "Step 4 / Step 5 明确说明 Move Method 把 calculateTotal / pay / cancel 搬入 Order 实体；After 代码展示行为下沉到 Order"
+    },
+    {
+      "text": "ddd-tactical-reference",
+      "passed": true,
+      "evidence": "六、DDD 战术模式参考章节引用 Value Object / Entity / Aggregate Root / Domain Service / Application Service / Move Method / Characterization Test 多个 DDD 战术概念"
+    },
+    {
+      "text": "complexity-warning",
+      "passed": true,
+      "evidence": "二、前置提醒：是否值得 DDD 化？章节明确给出 4 项评估标准，提出'轻度充血'方案并强烈建议先用 /req-reverse-eng 把状态机和不变量梳理清楚"
+    }
+  ],
+  "summary": {
+    "pass_rate": 1.0,
+    "passed": 6,
+    "failed": 0,
+    "total": 6
+  }
+}

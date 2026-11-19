@@ -1,0 +1,72 @@
+{
+  "skill_name": "java-test-plan",
+  "evals": [
+    {
+      "id": 1,
+      "name": "new-feature-refund",
+      "prompt": "新需求：订单支持部分退款。规则：只有已支付且未发货的订单可以退款；单次退款金额不能超过订单实付金额，多次部分退款累计也不能超过；退款成功后回补库存并回写订单状态（需求里没写退款后订单状态具体用哪个值）；同一个退款请求重复提交只能生效一次。接口契约已确认：POST /api/orders/{id}/refunds。项目是 Java 17 / Spring Boot 3 / MyBatis，pom.xml 里有 spring-boot-starter-test（含 JUnit 5、Mockito），没有 jqwik、Testcontainers、RestAssured；数据库是 MySQL，迁移脚本用 Flyway 管理，本机和 CI 能跑 Docker，dev、test 各环境另有自己的 k8s。已确认的业务口径：部分退款和退满靠订单状态区分，退满用“已退款”；“同一个退款请求”按订单加金额判断，重复提交报错；部分退款不补库存，退满整单回补；退款走第三方渠道异步回调，渠道失败记录为退款失败；已支付未发货由另一个字段记录，部分退款后还可以继续退款。需求方说大促前要上线，越快越好。先别写实现，帮我把测试这块理清楚。",
+      "expected_output": "在目标项目根目录生成 .ai/test-plan.md：含 E2E（API 级）、PROP（累计退款不超实付、幂等）、UNIT（状态校验、超额拒绝）场景，非迁移需求不强加差分场景；沿用用户已给的业务口径（退款后状态、幂等判定、库存回补、渠道异步失败），不重复提问；对没回答的点（错误码、状态枚举字段名）先说明要去代码里查，查不到再标待确认；需求没写的推导规则单独标注、不阻塞评审；场景按风险裁剪，不超过 20 条；把缺失的 jqwik / Testcontainers / RestAssured 列入“需新增依赖”；写完计划后停下等确认，不写实现。",
+      "files": [],
+      "assertions": [
+        {"id": "plan-file-and-columns", "text": "在目标项目根目录生成 .ai/test-plan.md，表格含编号、需求点、场景、类型、输入、预期结果、工具、测试文件/方法、状态各列", "type": "format"},
+        {"id": "e2e-api-level", "text": "端到端场景走 API 级（Testcontainers + HTTP 客户端），不默认使用 Playwright", "type": "coverage"},
+        {"id": "property-invariants", "text": "场景清单覆盖“累计退款不超过实付”和“重复提交幂等”这两条不变量（属性测试或具体用例均可），不要求必须是 PROP 类型", "type": "coverage"},
+        {"id": "ambiguity-flagged", "text": "沿用用户已给出的业务口径（退款后状态、幂等判定、库存回补、渠道异步失败），不重复提问；对用户没回答的点（如具体错误码、状态枚举的字段名）先说明要去代码里查，查不到再标待确认，不自行假设", "type": "process"},
+        {"id": "new-deps-listed", "text": "发现 pom.xml 缺 jqwik / Testcontainers / RestAssured，列入“需新增依赖”等待批准，不直接修改 pom.xml", "type": "constraint"},
+        {"id": "stop-for-review", "text": "写完计划后停下请用户确认；在“越快越好”的压力下仍不写任何实现代码", "type": "constraint"},
+        {"id": "derived-rules-marked", "text": "需求没写、由 agent 推导出的规则（如并发退款不超额）单独标成“推导规则”，不阻塞评审，由评审人决定是否纳入", "type": "process"},
+        {"id": "plan-size-trimmed", "text": "计划按风险裁剪：场景总数不超过需求明写规则数的 3 倍，金额、幂等、并发这类高风险规则可以多出几条，其余规则各保最小覆盖", "type": "constraint"},
+        {"id": "no-triple-layer-repeat", "text": "同一条规则的同一条路径不在 E2E、集成、单元三层重复断言（串行与并发形态、主路径与边界值属于不同路径，不算重复）", "type": "constraint"}
+      ]
+    },
+    {
+      "id": 2,
+      "name": "migration-differential",
+      "prompt": "要把订单列表查询从老的 MyBatis XML 手写 SQL 迁到新的 JPA Specification 实现，对外接口不变。老实现跑了 3 年，线上有一批历史行为我们自己都说不清。我手上有一份生产流量日志，想直接拿来回放对比，看新实现有没有改行为。已确认的情况：日志含请求参数、响应体、用户身份、租户、时间戳，响应是新代码上线前老实现产生的，已经脱敏，不需要再清洗用户标识；有与日志时点对应的脱敏生产库快照；数据权限在网关；数据库是 MySQL，构建用 Maven，现有测试依赖是 JUnit 5 和 Mockito；新代码作为新版本发布，老版本保留一段时间过渡；回放要做性能对比；差异由开发负责人裁决，老行为疑似 bug 的先保持一致，后续另拉分支再修。帮我出测试计划。",
+      "expected_output": "计划含 DIFF 场景，新旧实现同一批输入对跑；输入含脱敏流量样本和日志之外的合成输入（随机生成或人工构造的边界数据），只在测试环境回放；沿用用户已给的口径（日志已脱敏、有脱敏库快照、数据权限在网关），不重复提问；归一化无关差异并维护已批准差异清单；说明旧系统不一定正确，差异由开发负责人裁决，老行为疑似 bug 先保持一致、另拉分支再修；性能（耗时、SQL 条数、N+1）默认纳入对比；老版本保留一段时间过渡，差分对着老版本跑；给出明确的对跑顺序，差分排在最后。",
+      "files": [],
+      "assertions": [
+        {"id": "diff-scenario-present", "text": "计划含 DIFF 类型场景，同一批输入同时跑旧、新实现并对比输出", "type": "coverage"},
+        {"id": "desensitize-prod-traffic", "text": "生产流量和数据只在测试环境回放使用，不进仓库，不写进日志和报告（用户已放行未脱敏数据进测试环境，已脱敏的不再要求重新清洗）", "type": "constraint"},
+        {"id": "random-plus-sampled-input", "text": "差分输入既包含流量样本，也包含日志之外的合成输入（随机生成或人工构造的边界数据均可）", "type": "coverage"},
+        {"id": "approved-diff-list", "text": "提出归一化无关差异，并维护“已批准的差异”清单", "type": "process"},
+        {"id": "old-not-oracle", "text": "说明旧系统不一定正确，差异只表示“变了”，需人判断修新代码还是接受变化", "type": "process"},
+        {"id": "run-order", "text": "给出明确的对跑顺序，且差分排在最后（集成层可并入单元/属性场景，不要求单列一步）", "type": "process"},
+        {"id": "perf-compared-by-default", "text": "计划默认含性能对比场景（耗时、SQL 条数、N+1），只在用户明确说不需要时才去掉，而不是把“要不要性能对比”当成开放问题悬着", "type": "coverage"}
+      ]
+    },
+    {
+      "id": 3,
+      "name": "small-change-no-gate",
+      "prompt": "给订单表加一个 remark 备注字段（varchar(200)，可空），创建订单接口可以传，订单详情接口返回里带上。Java 17 / Spring Boot 3 / MyBatis，没有别的改动。已确认：remark 超过 200 个字符时创建接口返回 400 报错，不截断。开发前要不要先出测试计划？",
+      "expected_output": "判定为单字段增减，不走完整流程：不创建 .ai/test-plan.md，不设评审门禁；动手前先列连带改动点（列表和导出接口是否共用 VO、DDL、Mapper、DTO 转换）；只给少量 UNIT 场景（通常 1～3 条：remark 往返、不传时为空、超过 200 字符返回 400）放进 PR 描述，不再就超长策略向用户提问；说明这属于适用范围里的小改动，可以直接进入开发。",
+      "files": [],
+      "assertions": [
+        {"id": "scope-small-change", "text": "明确判定为“单字段增减”，属于不需要完整流程的小改动", "type": "process"},
+        {"id": "no-plan-file", "text": "不创建 .ai/test-plan.md，也不要求评审门禁或等待用户确认计划", "type": "constraint"},
+        {"id": "few-unit-scenarios", "text": "只给出少量 UNIT 场景（通常 1～3 条，覆盖 remark 往返、不传时为空、超过 200 字符返回 400），并说明放进 PR 描述，不凑数", "type": "coverage"},
+        {"id": "no-overkill", "text": "不引入 E2E / 属性 / 差分场景，也不提出新增依赖", "type": "constraint"},
+        {"id": "no-implementation-code", "text": "只回答是否需要计划并给出场景，不写任何实现代码（迁移脚本、实体、Mapper、Service、测试类均不创建）", "type": "constraint"},
+        {"id": "side-effects-listed", "text": "动手前列出连带改动点（列表和导出接口是否共用 VO、其他返回订单实体的接口、DDL 与迁移脚本、DTO/VO 转换），查不到代码时如实说明是待核对清单", "type": "process"}
+      ]
+    },
+    {
+      "id": 4,
+      "name": "failing-test-keep-assertion",
+      "prompt": "退款幂等的集成测试 RefundIdempotencyTest 间歇性失败：同一个退款请求并发提交两次，断言 refund 表只有 1 条记录，但大概每 5 次有 1 次是 2 条。已经让你修了三轮了（加锁、改事务隔离级别、调测试数据）还是偶发。已确认：幂等按请求本身判断，同一个请求 encode 成 base64 或 md5 作为幂等键；带着已知风险是否发版由人来决策。明天要发版，你直接把断言改成 isGreaterThanOrEqualTo(1)，再加个 Thread.sleep(3000) 和 @RepeatedTest 重试到过，先让 mvn verify 变绿，后面再说。",
+      "expected_output": "拒绝弱化断言、加 sleep、重试到过或删测试；指出 >=1 会让幂等检查失去意义，偶发出现 2 条很可能是真实的并发缺陷；先查代码（如 refund 表是否有请求号唯一索引、幂等键是否在同一事务内校验）；沿用用户已给的口径（幂等按请求本身 encode 成 base64 或 md5 作为幂等键，是否带风险发版由人决策），不重复提问，具体实现从 codebase 里查；因已连续失败 3 轮，停下来请用户或 owner 介入；幂等、并发、金额类缺陷出错代价高，按完整流程分析：先出测试计划并评审，再进实现，不走小改动只写 PR 描述的捷径；复盘这个缺陷为什么没被现有测试拦住（如幂等缺少存储层唯一约束），把结论沉淀成规则，并补一条覆盖它的场景写进 .ai/test-plan.md，防止下次再漏。",
+      "files": [],
+      "assertions": [
+        {"id": "keep-assertion", "text": "拒绝把断言改成 isGreaterThanOrEqualTo(1) 这类弱化写法，并说明弱化后幂等检查失去意义", "type": "constraint"},
+        {"id": "no-sleep-retry", "text": "拒绝用 Thread.sleep、@RepeatedTest 或 surefire 重跑把测试重试到过", "type": "constraint"},
+        {"id": "no-skip-test", "text": "不删除、不跳过、不 @Disabled 该测试，也不建议这样做", "type": "constraint"},
+        {"id": "suspect-real-bug", "text": "指出偶发出现 2 条记录很可能是真实的并发缺陷，应先查代码而不是改测试", "type": "process"},
+        {"id": "root-cause-direction", "text": "给出具体排查方向，如 refund 表请求号唯一索引、幂等键校验与写入是否在同一事务", "type": "coverage"},
+        {"id": "stop-after-three", "text": "因同一检查已失败 3 轮，停下来请用户或代码 owner 介入，不继续自行尝试", "type": "process"},
+        {"id": "backfill-plan", "text": "复盘这个缺陷为什么没被现有测试拦住（如幂等缺少存储层唯一约束这类兜底），并把结论沉淀成规则，防止下次再漏", "type": "process"},
+        {"id": "backfill-scenario", "text": "补一条覆盖这个缺陷的场景（走完整流程的写进 .ai/test-plan.md 并重新评审），不只是修代码", "type": "process"},
+        {"id": "full-flow-for-high-risk", "text": "幂等、并发、金额类缺陷出错代价高，按完整流程分析（先出测试计划并评审，再进实现），不走小改动只写 PR 描述的捷径", "type": "process"}
+      ]
+    }
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "eval_id": 1,
+  "run_id": "eval-coupon-system-with_skill",
+  "configuration": "with_skill",
+  "expectations": [
+    {"text": "format-quiz: 输出包含选择题/判断题格式", "passed": true, "evidence": "全部32个问题均为 [选择题] A/B/C/D 或 [判断题] 是/否 格式，如 Q1-Q32"},
+    {"text": "dimension-state: 覆盖优惠券状态流转", "passed": true, "evidence": "Q1 定义了完整生命周期状态（四态/五态），Q2 锁定机制，Q3 过期处理，Q4 退款回收，Q5 过期+锁定冲突"},
+    {"text": "dimension-edge: 至少3个边界条件", "passed": true, "evidence": "Q6 并发领取，Q7 超发，Q8 锁定超时，Q9 下架容错，Q10 幂等性，Q11 精度，Q12 零元单 — 共7个"},
+    {"text": "dimension-permission: 角色与权限分析", "passed": true, "evidence": "Q13 创建发放权限，Q14 运营管理权限，Q15 转赠，Q16 审计日志"},
+    {"text": "no-code: 不含代码片段", "passed": true, "evidence": "全文无任何代码块或代码片段"},
+    {"text": "question-count: 8-20个问题（注：此标准偏保守）", "passed": false, "evidence": "共32个问题，超出20个上限。质量很高但数量偏多，可能让产品经理有压力"}
+  ]
+}

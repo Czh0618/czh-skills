@@ -1,0 +1,8 @@
+{
+  "expectations": [
+    {"text": "has-blame", "passed": true, "evidence": "输出明确指出'前端和后端都有问题'，并指出了前端参数名 userid vs userId 的拼写错误，同时发现 @RequestParam 与 JSON body 的契约不一致"},
+    {"text": "root-cause", "passed": true, "evidence": "用大白话解释了根本原因：前端把 userId 拼成了 userid，且传输方式不匹配"},
+    {"text": "fix-suggestion", "passed": true, "evidence": "给出了两个修复方案：前端改参数名 + 后端改用 @RequestBody"},
+    {"text": "evidence-cited", "passed": true, "evidence": "引用了具体证据：前端发送 userid（全小写），后端期望 userId（驼峰）"}
+  ]
+}

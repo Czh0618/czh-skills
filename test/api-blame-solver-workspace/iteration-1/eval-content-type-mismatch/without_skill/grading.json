@@ -1,0 +1,8 @@
+{
+  "expectations": [
+    {"text": "has-blame", "passed": true, "evidence": "输出明确判定'责任方：前端'，并指出前端声明与实际内容不匹配"},
+    {"text": "root-cause", "passed": true, "evidence": "用大白话解释了根本原因：前端 Content-Type 写成了 text/plain，但 body 是 JSON，Spring 看到 text/plain 就拒绝处理"},
+    {"text": "fix-suggestion", "passed": true, "evidence": "给出了具体修复方案：将 Content-Type 改为 application/json，附代码对比"},
+    {"text": "status-code-explained", "passed": true, "evidence": "解释了'415 是服务端正确的行为，不需要后端修改'"}
+  ]
+}

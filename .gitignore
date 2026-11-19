@@ -19,9 +19,6 @@ venv/
 *.log
 /tmp/
 
-# Test
-test/
-
 
 # AI
 .claude/

@@ -1,0 +1,40 @@
+{
+  "expectations": [
+    {
+      "text": "smell-god-class",
+      "passed": true,
+      "evidence": "诊断 #1 上帝类 UserService，严重度高，引用 700+ 行 / 16 方法 / 11 字段作为证据"
+    },
+    {
+      "text": "smell-divergent-change",
+      "passed": true,
+      "evidence": "诊断 #2 发散式变化，严重度高，明确指出 4 个子域分组（用户/角色权限/审计/通知）"
+    },
+    {
+      "text": "split-by-subdomain",
+      "passed": true,
+      "evidence": "step2-roadmap.md 中按 User / Permission / Audit / Notification 拆分为 4 个 @Service Bean"
+    },
+    {
+      "text": "spring-warnings",
+      "passed": true,
+      "evidence": "诊断 #6 过宽 @Transactional、#7 AOP self-invocation 失效、#8 跨子域数据耦合均列出；总体观察 3、4 详细讨论事务边界变化与 AOP 风险"
+    },
+    {
+      "text": "split-order",
+      "passed": true,
+      "evidence": "总体观察 2 明确给出顺序：'通知和审计是叶子子域应先拆；角色权限是中间层；用户基础最后定型'"
+    },
+    {
+      "text": "circular-dep-check",
+      "passed": true,
+      "evidence": "总体观察 4 单独章节'循环依赖预防'，建议拆分后不应反向注入 UserService，必要时通过 ApplicationEvent 解耦"
+    }
+  ],
+  "summary": {
+    "pass_rate": 1.0,
+    "passed": 6,
+    "failed": 0,
+    "total": 6
+  }
+}

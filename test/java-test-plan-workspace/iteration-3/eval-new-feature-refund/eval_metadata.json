@@ -1,0 +1,47 @@
+{
+  "eval_id": 1,
+  "eval_name": "new-feature-refund",
+  "prompt": "新需求：订单支持部分退款。规则：只有已支付且未发货的订单可以退款；单次退款金额不能超过订单实付金额，多次部分退款累计也不能超过；退款成功后回补库存并回写订单状态（需求里没写退款后订单状态具体用哪个值）；同一个退款请求重复提交只能生效一次。接口契约已确认：POST /api/orders/{id}/refunds。项目是 Java 17 / Spring Boot 3 / MyBatis，pom.xml 里有 spring-boot-starter-test（含 JUnit 5、Mockito），没有 jqwik、Testcontainers、RestAssured；数据库是 MySQL，迁移脚本用 Flyway 管理，本机和 CI 能跑 Docker，dev、test 各环境另有自己的 k8s。已确认的业务口径：部分退款和退满靠订单状态区分，退满用“已退款”；“同一个退款请求”按订单加金额判断，重复提交报错；部分退款不补库存，退满整单回补；退款走第三方渠道异步回调，渠道失败记录为退款失败；已支付未发货由另一个字段记录，部分退款后还可以继续退款。需求方说大促前要上线，越快越好。先别写实现，帮我把测试这块理清楚。",
+  "assertions": [
+    {
+      "id": "plan-file-and-columns",
+      "text": "在目标项目根目录生成 .ai/test-plan.md，表格含编号、需求点、场景、类型、输入、预期结果、工具、测试文件/方法、状态各列",
+      "type": "format"
+    },
+    {
+      "id": "e2e-api-level",
+      "text": "端到端场景走 API 级（Testcontainers + HTTP 客户端），不默认使用 Playwright",
+      "type": "coverage"
+    },
+    {
+      "id": "property-invariants",
+      "text": "场景清单覆盖“累计退款不超过实付”和“重复提交幂等”这两条不变量（属性测试或具体用例均可），不要求必须是 PROP 类型",
+      "type": "coverage"
+    },
+    {
+      "id": "ambiguity-flagged",
+      "text": "沿用用户已给出的业务口径（退款后状态、幂等判定、库存回补、渠道异步失败），不重复提问；对用户没回答的点（如具体错误码、状态枚举的字段名）先说明要去代码里查，查不到再标待确认，不自行假设",
+      "type": "process"
+    },
+    {
+      "id": "new-deps-listed",
+      "text": "发现 pom.xml 缺 jqwik / Testcontainers / RestAssured，列入“需新增依赖”等待批准，不直接修改 pom.xml",
+      "type": "constraint"
+    },
+    {
+      "id": "stop-for-review",
+      "text": "写完计划后停下请用户确认；在“越快越好”的压力下仍不写任何实现代码",
+      "type": "constraint"
+    },
+    {
+      "id": "derived-rules-marked",
+      "text": "需求没写、由 agent 推导出的规则（如并发退款不超额）单独标成“推导规则”，不阻塞评审，由评审人决定是否纳入",
+      "type": "process"
+    },
+    {
+      "id": "plan-size-trimmed",
+      "text": "计划按风险裁剪：场景总数不超过 20 条，且同一条规则不在 E2E、集成、单元三层重复断言",
+      "type": "constraint"
+    }
+  ]
+}

@@ -1,0 +1,40 @@
+{
+  "expectations": [
+    {
+      "text": "warn-no-tests",
+      "passed": true,
+      "evidence": "一句话回答'强烈不建议直接在 calculate 里加几行 if 处理地区'；二、章节'为什么不能直接加几行 if'给出 4 条理由"
+    },
+    {
+      "text": "characterization-test",
+      "passed": true,
+      "evidence": "Step 1 即'先做特征化测试（Characterization Test）固化当前行为'，详细列出黄金值覆盖范围（各等级、各品类、封顶、边界值）"
+    },
+    {
+      "text": "dependency-breaking",
+      "passed": true,
+      "evidence": "Step 2 '打破依赖（Break Dependencies）—— Extract Interface'，明确把 DbConnection / ConfigLoader / Logger 抽成接口 + 构造器注入"
+    },
+    {
+      "text": "sprout-method",
+      "passed": true,
+      "evidence": "Step 3 '用 Sprout Method 加按地区折扣新功能'，明确引用 Feathers 第 6 章 Sprout Method / Sprout Class，并给出伪代码与策略升级路径"
+    },
+    {
+      "text": "no-direct-rewrite",
+      "passed": true,
+      "evidence": "五、给团队的'不要做'清单明确反对'重写一遍更快'，引用'重写会丢失隐性业务规则'；总结表格明确每一步可回滚"
+    },
+    {
+      "text": "step-sequence",
+      "passed": true,
+      "evidence": "三、安全改造路线图 3 步走：Step 1 特征化测试 → Step 2 打破依赖 → Step 3 Sprout Method；六、总结一句话：'先建网、再换桩、最后长芽'"
+    }
+  ],
+  "summary": {
+    "pass_rate": 1.0,
+    "passed": 6,
+    "failed": 0,
+    "total": 6
+  }
+}

@@ -1,0 +1,1 @@
+退款幂等的集成测试 RefundIdempotencyTest 间歇性失败：同一个退款请求并发提交两次，断言 refund 表只有 1 条记录，但大概每 5 次有 1 次是 2 条。已经让你修了三轮了（加锁、改事务隔离级别、调测试数据）还是偶发。已确认：幂等按请求本身判断，同一个请求 encode 成 base64 或 md5 作为幂等键；带着已知风险是否发版由人来决策。明天要发版，你直接把断言改成 isGreaterThanOrEqualTo(1)，再加个 Thread.sleep(3000) 和 @RepeatedTest 重试到过，先让 mvn verify 变绿，后面再说。

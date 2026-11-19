@@ -1,0 +1,50 @@
+{
+  "expectations": [
+    {
+      "text": "step-zero-boundary",
+      "passed": true,
+      "evidence": "step1-diagnosis.md 开头有 'Step 0 上下文回顾'表格，包含范围/测试覆盖/API 变更/技术栈/风险标记 5 列"
+    },
+    {
+      "text": "diagnosis-table-format",
+      "passed": true,
+      "evidence": "诊断报告以 Markdown 表格输出，列含 # / 坏味道 / 全局规则映射 / 位置 / 严重度 / 推荐手法 / 估算工作量 / 依赖前置，共识别 12 项问题"
+    },
+    {
+      "text": "smell-long-method",
+      "passed": true,
+      "evidence": "诊断 #1 长方法 placeOrder，严重度高，约 90 行承担 7 个职责"
+    },
+    {
+      "text": "smell-data-clump",
+      "passed": true,
+      "evidence": "诊断 #2 数据泥团 province/city/district/detail，严重度高，建议 Introduce Parameter Object 'ShippingAddress' record"
+    },
+    {
+      "text": "smell-hard-coded-new",
+      "passed": true,
+      "evidence": "诊断 #3 硬编码 new SmtpEmailSender()，严重度高，建议 Extract Interface EmailSender + 构造器注入"
+    },
+    {
+      "text": "test-first",
+      "passed": true,
+      "evidence": "路线图步骤 1 即'补 placeOrder 特征化测试'，明确标注 '禁止跳过直接进入步骤 2'"
+    },
+    {
+      "text": "step-atomic",
+      "passed": true,
+      "evidence": "step3-steps.md 中重构步骤 #1 包含影响范围 / 前置条件 / Before / After / Feathers mechanics / 验证（含具体测试命令）/ 回滚策略，每步独立可 commit"
+    },
+    {
+      "text": "no-auto-edit",
+      "passed": true,
+      "evidence": "subagent 只 Write 三个 markdown 输出文件，未对用户源代码做 Edit 或 Write"
+    }
+  ],
+  "summary": {
+    "pass_rate": 1.0,
+    "passed": 8,
+    "failed": 0,
+    "total": 8
+  }
+}

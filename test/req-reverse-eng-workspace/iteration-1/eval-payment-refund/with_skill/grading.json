@@ -1,0 +1,13 @@
+{
+  "eval_id": 3,
+  "run_id": "eval-payment-refund-with_skill",
+  "configuration": "with_skill",
+  "expectations": [
+    {"text": "format-quiz: 输出包含选择题/判断题格式", "passed": true, "evidence": "全部33个问题均为 [选择题] 或 [判断题] 格式"},
+    {"text": "dimension-state: 覆盖退款状态流转", "passed": true, "evidence": "Q1 订单状态变化，Q2 退款单状态机，Q3 拒绝后处理，Q5 撤销，Q6 失败恢复"},
+    {"text": "dimension-edge: 边界条件", "passed": true, "evidence": "Q7-Q14: 金额下限、上限校验、多次退款、并发提交、幂等性、小数精度、优惠分摊、时间窗口"},
+    {"text": "dimension-data: 数据一致性", "passed": true, "evidence": "Q20 金额更新策略，Q21 事务边界，Q22 积分/会员同步，Q23 优惠券退还"},
+    {"text": "no-code: 不含代码片段", "passed": true, "evidence": "全文无代码"},
+    {"text": "question-count: 8-20个问题", "passed": false, "evidence": "共33个问题，超出20个上限"}
+  ]
+}

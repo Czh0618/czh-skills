@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.order.mapper.OrderMapper">
+
+    <resultMap id="orderMap" type="com.example.order.entity.Order">
+        <id property="id" column="id"/>
+        <result property="userId" column="user_id"/>
+        <result property="amount" column="amount"/>
+        <result property="remark" column="remark"/>
+    </resultMap>
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO t_order (user_id, amount, remark)
+        VALUES (#{userId}, #{amount}, #{remark})
+    </insert>
+
+    <select id="selectById" resultMap="orderMap">
+        SELECT id, user_id, amount, remark FROM t_order WHERE id = #{id}
+    </select>
+</mapper>

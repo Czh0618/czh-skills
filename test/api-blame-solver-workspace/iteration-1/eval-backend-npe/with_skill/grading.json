@@ -1,0 +1,8 @@
+{
+  "expectations": [
+    {"text": "has-blame", "passed": true, "evidence": "输出明确指出'后端'，并在 Verdict 表格中标明 Resolved party: Backend"},
+    {"text": "root-cause", "passed": true, "evidence": "用大白话解释了根本原因：后端在 UserService.updateProfile 第 87 行调用 nickname.length() 时没有判空"},
+    {"text": "fix-suggestion", "passed": true, "evidence": "给出了后端修复代码：加 null check 或使用 @NotNull 校验注解"},
+    {"text": "evidence-cited", "passed": true, "evidence": "引用了异常类型 NullPointerException 和出错位置 UserService.java:87"}
+  ]
+}

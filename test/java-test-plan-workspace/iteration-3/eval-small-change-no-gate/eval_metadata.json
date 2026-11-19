@@ -1,0 +1,37 @@
+{
+  "eval_id": 3,
+  "eval_name": "small-change-no-gate",
+  "prompt": "给订单表加一个 remark 备注字段（varchar(200)，可空），创建订单接口可以传，订单详情接口返回里带上。Java 17 / Spring Boot 3 / MyBatis，没有别的改动。已确认：remark 超过 200 个字符时创建接口返回 400 报错，不截断。开发前要不要先出测试计划？",
+  "assertions": [
+    {
+      "id": "scope-small-change",
+      "text": "明确判定为“单字段增减”，属于不需要完整流程的小改动",
+      "type": "process"
+    },
+    {
+      "id": "no-plan-file",
+      "text": "不创建 .ai/test-plan.md，也不要求评审门禁或等待用户确认计划",
+      "type": "constraint"
+    },
+    {
+      "id": "few-unit-scenarios",
+      "text": "只给出少量 UNIT 场景（通常 1～3 条，覆盖 remark 往返、不传时为空、超过 200 字符返回 400），并说明放进 PR 描述，不凑数",
+      "type": "coverage"
+    },
+    {
+      "id": "no-overkill",
+      "text": "不引入 E2E / 属性 / 差分场景，也不提出新增依赖",
+      "type": "constraint"
+    },
+    {
+      "id": "no-implementation-code",
+      "text": "只回答是否需要计划并给出场景，不写任何实现代码（迁移脚本、实体、Mapper、Service、测试类均不创建）",
+      "type": "constraint"
+    },
+    {
+      "id": "side-effects-listed",
+      "text": "动手前列出连带改动点（列表和导出接口是否共用 VO、其他返回订单实体的接口、DDL 与迁移脚本、DTO/VO 转换），查不到代码时如实说明是待核对清单",
+      "type": "process"
+    }
+  ]
+}

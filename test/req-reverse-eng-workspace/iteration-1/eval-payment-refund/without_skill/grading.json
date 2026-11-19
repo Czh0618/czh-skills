@@ -1,0 +1,13 @@
+{
+  "eval_id": 3,
+  "run_id": "eval-payment-refund-without_skill",
+  "configuration": "without_skill",
+  "expectations": [
+    {"text": "format-quiz: 输出包含选择题/判断题格式", "passed": false, "evidence": "全部问题为 checklist 格式（- [ ]），无选择题/判断题"},
+    {"text": "dimension-state: 覆盖退款状态流转", "passed": true, "evidence": "第3节列出了完整状态机"},
+    {"text": "dimension-edge: 边界条件", "passed": true, "evidence": "第9节并发与边界场景覆盖了多个边界条件"},
+    {"text": "dimension-data: 数据一致性", "passed": true, "evidence": "第6节关联业务影响覆盖优惠券、积分、发票、库存"},
+    {"text": "no-code: 不含代码片段", "passed": true, "evidence": "全文无代码"},
+    {"text": "question-count: 8-20个问题", "passed": false, "evidence": "约40+个问题，超出上限"}
+  ]
+}
